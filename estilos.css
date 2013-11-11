@@ -7,6 +7,11 @@ margin-left: 10px;
 float: left;
 }
 
+.body
+{
+width:100%
+}
+
 .titulo_menu
 {
 font-family: Arial;
