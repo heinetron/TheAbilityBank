@@ -81,7 +81,7 @@ class DB {
 	public function createUserTable()
 	{
 		// Create table
-		$sql="CREATE TABLE IF NOT EXISTS User(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40) NOT NULL, Email VARCHAR(40) NOT NULL, Password VARCHAR(120) NOT NULL, Salt VARCHAR(120) NOT NULL, Premium BOOL NOT NULL);";
+		$sql="CREATE TABLE IF NOT EXISTS User(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40) NOT NULL, UNIQUE(Name), Email VARCHAR(40) NOT NULL, Password VARCHAR(120) NOT NULL, Salt VARCHAR(120) NOT NULL, Premium BOOL NOT NULL);";
 
 		// Execute query
 		if($this->query($sql)){
@@ -109,7 +109,7 @@ class DB {
 	public function createOfferTable()
 	{
 		// Create table
-		$sql="CREATE TABLE IF NOT EXISTS Offer(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40), Category VARCHAR(40), Description VARCHAR(120) NOT NULL)";
+		$sql="CREATE TABLE IF NOT EXISTS Offer(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40), UNIQUE(Name), Category VARCHAR(40) NOT NULL, Description VARCHAR(120))";
 
 		// Execute query
 		if($this->query($sql)){
@@ -120,17 +120,10 @@ class DB {
 		}
 	}
 
-	public function getOffer(){
-		
-		$sql = "SELECT * FROM Offer";
-		$offer = $this->query($sql);
-		return $offer;
-	}
-
 	public function insertOffer($name, $category, $description)
 	{
 		// Insert data
-		$sql = "INSERT INTO `Offer`(`Name`, `Category`, `Description`) VALUES ('".$name."', '".$category."', '".$description."')";
+		$sql = "INSERT INTO `Offer`(`Name`, `Category`, `Description`) VALUES ('$name', '$category', '$description')";
 		
 		if(!$this->query($sql)){
 			echo "Error inserting offer: " . mysql_error();
@@ -142,7 +135,7 @@ class DB {
 	public function createDemandTable()
 	{
 		// Create table
-		$sql="CREATE TABLE IF NOT EXISTS Demand(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40), Category VARCHAR(40), Description VARCHAR(120) NOT NULL)";
+		$sql="CREATE TABLE IF NOT EXISTS Demand(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40), UNIQUE(Name), Category VARCHAR(40), Description VARCHAR(120) NOT NULL)";
 
 		// Execute query
 		if($this->query($sql)){
@@ -153,21 +146,13 @@ class DB {
 		}
 	}
 
-	public function getDemand($connection){
-		
-		$sql = "SELECT * FROM Offer";
-		$demand = mysqli_query($connection,$sql);
-		$demand = mysqli_fetch_array($demand);
-		return $demand;
-	}
-
-	public function insertDemand($connection, $name, $category, $description)
+	public function insertDemand($name, $category, $description)
 	{
 		// Insert data
-		$sql = "INSERT INTO `Demand`(`Name`, `Category`, `Description`) VALUES ('".$name."', '".$category."', '".$description."')";
+		$sql = "INSERT INTO `Demand`(`Name`, `Category`, `Description`) VALUES ('$name', '$category', '$description')";;
 		$result = $this->query($sql);
 		if(!$result){
-			echo "Error inserting offer: " . mysql_error();
+			echo "Error inserting demand: " . mysql_error();
 		}
 	}
 }
