@@ -117,4 +117,56 @@ class Offer{
 		" / Category: " . $this->_category;
 	}
 }
+
+class Demand{
+	
+	private $_id;
+	private $_name;
+	private $_category;
+	private $_description;
+	
+		public static function withID($id){
+		$instance = new self();
+		$instance->loadByID($id);
+		return $instance;
+	}
+	
+	private function loadByID($id){
+		$db = new DB();
+		$queryResults = $db->selectTableWithColumn("Demand", "id", $id);
+		if($queryResults){
+			$this->fill($queryResults[0]);
+		} else {
+			return false;
+		}
+	}
+	
+	public static function withName($name){
+		$instance = new self();
+		$instance->loadByName($name);
+		return $instance;
+	}
+	
+	private function loadByName($name){
+		$db = new DB();
+		$queryResults = $db->selectTableWithColumn("Demand", "Name", $name);
+		if($queryResults){
+			$this->fill($queryResults[0]);
+		} else {
+			return false;
+		}
+	}
+
+	public function fill(DBQueryResult $result){
+		$this->_id = $result->id;
+		$this->_name = $result->Name;
+		$this->_category = $result->Category;
+		$this->_description = $result->Description;
+	}	
+	public function __toString(){
+		return "ID: " . $this->_id . 
+		" / Name: " . $this->_name . 
+		" / Category: " . $this->_category;
+	}
+}
 ?>
