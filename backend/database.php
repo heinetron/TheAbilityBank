@@ -48,7 +48,13 @@ class DB {
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	// Selects all rows from a table
+	public function selectAll($tableName){
+		$sql = "SELECT * FROM $tableName";
+		return $this->query($sql);
+	}
 	
+	// Selects a single cell
 	public function selectTableWithColumn($tableName, $columnName, $columnValue){
 		$sql = "SELECT * FROM $tableName where $columnName = \"$columnValue\"";
 		return $this->query($sql);
