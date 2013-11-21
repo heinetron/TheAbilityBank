@@ -2,27 +2,62 @@
 
 	require_once(dirname(__FILE__) . '/backend/config.php');
 
-	$user1 = User::withID(1);
-	echo $user1;
+	////////////////////////////////// USER TESTS ///////////////////////////////////
+	// // CREATE, UPDATE, DELETE: OK
+	// $user = new User();
+	// $user->setName("Usuario3");
+	// $user->setEmail("usuario3@mail.com");
+	// $user->setPremium(1);
+	// $user->setPassword("usuario_p");
 	
-	$user2 = User::withName("usuario2");
-	echo $user2;
+	// //$user->save();
+	// //$user->delete();
+	// //$user->update();
+	// foreach(User::getAll() as $user){
+		// echo $user;
+		// echo "</br>";
+	// }
 
-	//$password = "usuario_p"; //correcta
-	$password = "incorrecta";
-		echo "</br>";echo "</br>";
-	if($user1->checkPassword($password)){
-		echo "Password verified";
-	} else {
-		echo "Wrong password";
-	}
+	// // LOAD : OK
+	// $user1 = User::withID(1);
+	// echo $user1;
+	// $user2 = User::withName("usuario2");
+	// echo $user2;
+
+	// PASSWORD TEST: OK
+	// //$password = "usuario_p"; //correcta
+	// $password = "incorrecta";
+		// echo "</br>";echo "</br>";
+	// if($user1->checkPassword($password)){
+		// echo "Password verified";
+	// } else {
+		// echo "Wrong password";
+	// }
+
 	
-	$db = new DB();
-	//$db->createUserTable();//OK
-	//$name = "usuario2";  $password = "usuario_p"; $email = "usuario2@usuario.com";	$premium = 0;
-	//$salt = md5( time() ); $password = hash('ripemd320',$salt . $password . $salt);
-	//$db->insertUser($name, $email, $password, $salt, $premium); // OK
-	$db->printTable("User");
-	//echo $user;
+	////////////////////////////////// OFFER TESTS ///////////////////////////////////
+	// CREATE, UPDATE, DELETE: PENDING
+	// $offer = new Offer();
+	// $offer->setName("Oferta3");
+	// $offer->setDescription("Descripcion oferta 3");
+	// $category = Category::withName("Pintura");
+	// $offer->setCategory($category);
+	// $user = User::withName("usuario");
+	// $offer->setUser($user);
 	
+	
+	// //$offer->save();
+	// //$offer->delete();
+	// //$offer->update();
+	// foreach(Offer::getAll() as $offer){
+		// echo $offer;
+		// echo "</br>";
+	// }	
+	
+	// //
+	// // LOAD: OK
+	//$offer1 = Offer::withID(1);
+	//echo $offer1;
+	//$offer2 = Offer::withName("Offer2");
+	//echo $offer2;
 ?>
