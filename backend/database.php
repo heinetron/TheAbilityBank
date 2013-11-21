@@ -16,11 +16,10 @@ class DB {
 	private function query($sql){
 		
 	$this->dbconnect();
-	echo "</br>";echo "</br>";
-	echo $sql;
-	echo "</br>";echo "</br>";
     $res = mysql_query($sql);
-
+	echo "</br></br>";
+	echo $sql;
+	echo "</br></br>";
     if ($res){
       if (strpos($sql,'SELECT') === false){
         return true;
@@ -56,25 +55,25 @@ class DB {
 	
 	// Selects a single cell
 	public function selectTableWithColumn($tableName, $columnName, $columnValue){
-		$sql = "SELECT * FROM $tableName where $columnName = \"$columnValue\"";
+		$sql = "SELECT * FROM $tableName WHERE $columnName = \"$columnValue\"";
 		return $this->query($sql);
 	}
 	
 	public function clearTable($tableName){
-		$sql="DELETE FROM ".$tableName;
+		$sql="DELETE FROM $tableName";
 		
 		// Execute query
 		$result = $this->query($sql);
 		if($result){
-			echo "Deleted all records from '$tableName'";
+			echo "Deleted all records from $tableName";
 		}
 		else{
-			echo "Could not delete records from '$tableName'";
+			echo "Could not delete records from $tableName";
 		}
 	}
 	
 	public function printTable($tableName){
-		$results = $this->query("SELECT * FROM $tableName");
+		$results = $this->query("SELECT * FROM $tableName);
 		
 		if($results){
 			var_dump($results);
@@ -107,8 +106,26 @@ class DB {
 			echo "Error inserting user: " . mysql_error();
 			return false;
 		}
+		return true;
 	}
-	//TODO delete, update
+	public function updateUser($name, $email, $password, $salt, $premium)
+	{
+		$sql = "UPDATE `User` SET `Email`=\"$email\",`Password`=\"$password\",`Salt`=\"$salt\",`Premium`=\"$premium\" WHERE Name=\"$name\"";
+		if(!$this->query($sql)){
+			echo "Error updating user: " . mysql_error();
+			return false;
+		}		
+		return true;
+	}
+	
+	public function deleteUser($name){
+		$sql = "DELETE FROM `User` WHERE `Name` = \"$name\"";
+		if(!$this->query($sql)){
+			echo "Error deleting user: " . mysql_error();
+			return false;
+		}		
+		return true;		
+	}
 	
 	/////////////////////////////////////////////// OFFERS ////////////////////////////////////////////////
 
@@ -126,16 +143,34 @@ class DB {
 		}
 	}
 
-	public function insertOffer($name, $category, $description)
+	public function insertOffer($name, $description, $category_id,  $user_id)
 	{
 		// Insert data
-		$sql = "INSERT INTO `Offer`(`Name`, `Category`, `Description`) VALUES ('$name', '$category', '$description')";
+		$sql = "INSERT INTO `Offer`(`Name`, `Description`, `Category_id`, `User_id`) VALUES ('$name', '$description', '$category_id', '$user_id')";
 		
 		if(!$this->query($sql)){
 			echo "Error inserting offer: " . mysql_error();
 		}
 	}
 
+	public function updateOffer($name, $description, $category_id, $user_id)
+	{
+		$sql = "UPDATE `Offer` SET `Description`=\"$description\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
+		if(!$this->query($sql)){
+			echo "Error updating user: " . mysql_error();
+			return false;
+		}		
+		return true;
+	}
+	
+	public function deleteOffer($name){
+		$sql = "DELETE FROM `Offer` WHERE `Name` = \"$name\"";
+		if(!$this->query($sql)){
+			echo "Error deleting offer: " . mysql_error();
+			return false;
+		}		
+		return true;		
+	}	
 	/////////////////////////////////////////////// DEMANDS ////////////////////////////////////////////////
 
 	public function createDemandTable()
@@ -164,7 +199,7 @@ class DB {
 }
 
 
-class DBQueryResult {
+class DBQueryResult {p
 
 	private $_results = array();
 	
