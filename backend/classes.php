@@ -86,6 +86,17 @@ class User{
 		" / Name: " . $this->_name . 
 		" / Email: " . $this->_email;
 	}
+	
+	public function getID(){
+		return $this->_id;
+	}
+	public function getName(){
+		return $this->_name;
+	}
+	public function getEmail(){
+		return $this->_email;
+	}
+	
 }
 
 class Offer{
@@ -156,6 +167,20 @@ class Offer{
 		" / Name: " . $this->_name . 
 		" / Category: " . $this->_category;
 	}
+	
+	public function getID(){
+		return $this->_id;
+	}
+	public function getName(){
+		return $this->_name;
+	}
+	public function getCategory(){
+		return $this->_category;
+	}
+	public function getDescription(){
+		return $this->_description;
+	}
+	
 }
 
 class Demand{
@@ -220,11 +245,26 @@ class Demand{
 		$this->_category = $result->Category;
 		$this->_description = $result->Description;
 	}	
+	
 	public function __toString(){
 		return "ID: " . $this->_id . 
 		" / Name: " . $this->_name . 
 		" / Category: " . $this->_category;
 	}
+	
+	public function getID(){
+		return $this->_id;
+	}
+	public function getName(){
+		return $this->_name;
+	}
+	public function getCategory(){
+		return $this->_category;
+	}
+	public function getDescription(){
+		return $this->_description;
+	}
+		
 }
 
 class Category{
@@ -289,6 +329,12 @@ class Category{
 	public function __toString(){
 		return "ID: " . $this->_id . 
 		" / Name: " . $this->_name;
+	}
+		public function getID(){
+		return $this->_id;
+	}
+	public function getName(){
+		return $this->_name;
 	}
 }
 ?>
