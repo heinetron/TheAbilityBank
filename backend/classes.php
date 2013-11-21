@@ -6,20 +6,7 @@ class User{
 	private $_email;
 	private $_password;
 	private $_salt;
-	//todo private $_author;
-		
-	// Loads all user in the database
-	public static function getAll(){
-		$db = new DB();
-		$queryResults = $db->selectAll("User");
-		$users = array();
-		foreach($queryResults as $qr){
-			$user = new User();
-			$user->fill($qr);
-			$users[] = $user;
-		}
-		return $users;
-	}
+	//TODO private $_user;
 	
 	// Loads a user using the ID
 	// $user = User::withID(1)
@@ -56,9 +43,9 @@ class User{
 			return false;
 		}
 	}
-	
+
 	// Sets all attributes using a QueryResult array
-	public function fill(DBQueryResult $result){
+	private function fill(DBQueryResult $result){
 		$this->_id = $result->id;
 		$this->_name = $result->Name;
 		$this->_email = $result->Email;
@@ -67,8 +54,26 @@ class User{
 		$this->_premium = $result->Premium;
 	}
 	
+	public function save(){
+		$db = new DB();
+		$queryResults = $db->insertUser($this->_name, $this->_email, $this->_password, $this->_salt, $this->_premium);
+		return $queryResults;
+	}
+	
+	public function update(){
+		$db = new DB();
+		$queryResults = $db->updateUser($this->_name, $this->_email, $this->_password, $this->_salt, $this->_premium);
+		return $queryResults;
+	}
+	
+	public function delete(){
+		$db = new DB();
+		$queryResults = $db->deleteUser($this->_name);
+		return $queryResults;
+	}
+		
 	// Returns true if password matches the user password
-	// if ($user->checkPassword("usuario_pass")
+	// if ($user->checkPassword("usuario_pass"))
 	public function checkPassword($password){
 		if($this->hashPassword($password, $this->_salt) == $this->_password){
 			return true;
@@ -77,16 +82,23 @@ class User{
 	}
 	
 	// increases password security
-	private function hashPassword($password, $salt){
+	public static function hashPassword($password, $salt){
 		return hash(HASH_ALGO, $salt . $password . $salt);
 	}
-
-	public function __toString(){
-		return "ID: " . $this->_id . 
-		" / Name: " . $this->_name . 
-		" / Email: " . $this->_email;
-	}
 	
+	// Loads all user in the database
+	public static function getAll(){
+		$db = new DB();
+		$queryResults = $db->selectAll("User");
+		$users = array();
+		foreach($queryResults as $qr){
+			$user = new User();
+			$user->fill($qr);
+			$users[] = $user;
+		}
+		return $users;
+	}
+
 	public function getID(){
 		return $this->_id;
 	}
@@ -96,7 +108,32 @@ class User{
 	public function getEmail(){
 		return $this->_email;
 	}
-	
+	public function getPremium(){
+		return $this->_premium;
+	}
+	public function setName($name){
+		$this->_name = $name;
+	}
+	public function setEmail($email){
+		$this->_email = $email;
+	}	
+	public function setPassword($password){
+		$salt = md5( time() );
+		$password = User::hashPassword($password, $salt);
+		$this->_password = $password;
+		$this->_salt = $salt;
+	}	
+	public function setPremium($premium){
+		$this->_premium = $premium;
+	}
+
+
+	public function __toString(){
+		return "ID: " . $this->_id . 
+		" / Name: " . $this->_name . 
+		" / Email: " . $this->_email;
+	}
+		
 }
 
 class Offer{
@@ -105,20 +142,8 @@ class Offer{
 	private $_name;
 	private $_category;
 	private $_description;
-	
-	// Loads all offers in the database
-	public static function getAll(){
-		$db = new DB();
-		$queryResults = $db->selectAll("Offer");
-		$offers = array();
-		foreach($queryResults as $qr){
-			$offer = new Offer();
-			$offer->fill($qr);
-			$offers[] = $offer;
-		}
-		return $offers;
-	}
-	
+	private $_user;
+		
 	// Loads an offer using its ID
 	// $offer = Offer::withID(1)
 	public static function withID($id){
@@ -156,18 +181,46 @@ class Offer{
 	}
 
 	// Sets all attributes using a QueryResult array
-	public function fill(DBQueryResult $result){
+	private function fill(DBQueryResult $result){
 		$this->_id = $result->id;
 		$this->_name = $result->Name;
-		$this->_category = $result->Category;
+		$this->_category = Category::withID($result->Category_id);
+		$this->_user = User::withID($result->User_id);
 		$this->_description = $result->Description;
-	}	
-	public function __toString(){
-		return "ID: " . $this->_id . 
-		" / Name: " . $this->_name . 
-		" / Category: " . $this->_category;
+	}
+
+	public function save(){
+		$db = new DB();
+		$c_id = $this->_category->getID();
+		$u_id = $this->_user->getID();
+		$queryResults = $db->insertOffer($this->_name, $this->_description, $c_id, $u_id);
+		return $queryResults;
 	}
 	
+	public function update(){
+		$db = new DB();
+		$queryResults = $db->updateOffer($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
+		return $queryResults;
+	}
+	
+	public function delete(){
+		$db = new DB();
+		$queryResults = $db->deleteOffer($this->_name);
+		return $queryResults;
+	}		
+
+	// Loads all offers in the database
+	public static function getAll(){
+		$db = new DB();
+		$queryResults = $db->selectAll("Offer");
+		$offers = array();
+		foreach($queryResults as $qr){
+			$offer = new Offer();
+			$offer->fill($qr);
+			$offers[] = $offer;
+		}
+		return $offers;
+	}
 	public function getID(){
 		return $this->_id;
 	}
@@ -180,7 +233,29 @@ class Offer{
 	public function getDescription(){
 		return $this->_description;
 	}
-	
+	public function getUser(){
+		return $this->_user;	
+	}
+	public function setName($name){
+		$this->_name = $name;;
+	}
+	public function setCategory($category){
+		$this->_category = $category;
+	}
+	public function setDescription($description){
+		$this->_description = $description;
+	}
+	public function setUser($user){
+		$this->_user = $user;	
+	}
+		
+	public function __toString(){
+		return "ID: " . $this->_id . 
+		" / Name: " . $this->_name . 
+		" / Category: " . $this->_category->getName() .
+		" / User: " . $this->_user->getName();
+	}
+		
 }
 
 class Demand{
@@ -189,19 +264,7 @@ class Demand{
 	private $_name;
 	private $_category;
 	private $_description;
-	
-	// Loads all demands in the database
-	public static function getAll(){
-		$db = new DB();
-		$queryResults = $db->selectAll("Demand");
-		$demands = array();
-		foreach($queryResults as $qr){
-			$demand = new Demand();
-			$demand->fill($qr);
-			$demands[] = $demand;
-		}
-		return $demands;
-	}
+	private $_user;
 	
 	// Loads a demand using its ID
 	// $demand = Demand::withID(1)	
@@ -239,19 +302,26 @@ class Demand{
 	}
 
 	// Sets all attributes using a QueryResult array
-	public function fill(DBQueryResult $result){
+	private function fill(DBQueryResult $result){
 		$this->_id = $result->id;
 		$this->_name = $result->Name;
-		$this->_category = $result->Category;
+		$this->_category = Category::withID($result->Category_id);
+		$this->_user = User::withID($result->User_id);
 		$this->_description = $result->Description;
+	}		
+	
+	// Loads all demands in the database
+	public static function getAll(){
+		$db = new DB();
+		$queryResults = $db->selectAll("Demand");
+		$demands = array();
+		foreach($queryResults as $qr){
+			$demand = new Demand();
+			$demand->fill($qr);
+			$demands[] = $demand;
+		}
+		return $demands;
 	}	
-	
-	public function __toString(){
-		return "ID: " . $this->_id . 
-		" / Name: " . $this->_name . 
-		" / Category: " . $this->_category;
-	}
-	
 	public function getID(){
 		return $this->_id;
 	}
@@ -264,26 +334,33 @@ class Demand{
 	public function getDescription(){
 		return $this->_description;
 	}
-		
+	public function getUser(){
+		return $this->_user;
+	}
+	public function setName($name){
+		$this->_name = $name;;
+	}
+	public function setCategory($category){
+		$this->_category = $category;
+	}
+	public function setDescription($description){
+		$this->_description = $description;
+	}
+	public function setUser($user){
+		$this->_user = $user;	
+	}
+	public function __toString(){
+		return "ID: " . $this->_id . 
+		" / Name: " . $this->_name . 
+		" / Category: " . $this->_category->getName() .
+		" / User: " . $this->_user->getName();
+	}	
 }
 
 class Category{
 
 	private $_id;
 	private $_name;
-	
-	// Loads all categories in the database
-	public static function getAll(){
-		$db = new DB();
-		$queryResults = $db->selectAll("Category");
-		$categories = array();
-		foreach($queryResults as $qr){
-			$category = new Dategory();
-			$category->fill($qr);
-			$categories[] = $category;
-		}
-		return $demands;
-	}
 	
 	// Loads a category using its ID
 	// $category = Dategory::withID(1)	
@@ -321,20 +398,32 @@ class Category{
 	}
 
 	// Sets all attributes using a QueryResult array
-	public function fill(DBQueryResult $result){
+	private function fill(DBQueryResult $result){
 		$this->_id = $result->id;
 		$this->_name = $result->Name;
 	}
 	
-	public function __toString(){
-		return "ID: " . $this->_id . 
-		" / Name: " . $this->_name;
-	}
-		public function getID(){
+	// Loads all categories in the database
+	public static function getAll(){
+		$db = new DB();
+		$queryResults = $db->selectAll("Category");
+		$categories = array();
+		foreach($queryResults as $qr){
+			$category = new Dategory();
+			$category->fill($qr);
+			$categories[] = $category;
+		}
+		return $demands;
+	}	
+	public function getID(){
 		return $this->_id;
 	}
 	public function getName(){
 		return $this->_name;
 	}
+	public function __toString(){
+		return "ID: " . $this->_id . 
+		" / Name: " . $this->_name;
+	}	
 }
 ?>
