@@ -191,9 +191,7 @@ class Offer{
 
 	public function save(){
 		$db = new DB();
-		$c_id = $this->_category->getID();
-		$u_id = $this->_user->getID();
-		$queryResults = $db->insertOffer($this->_name, $this->_description, $c_id, $u_id);
+		$queryResults = $db->insertOffer($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
 		return $queryResults;
 	}
 	
@@ -309,7 +307,23 @@ class Demand{
 		$this->_user = User::withID($result->User_id);
 		$this->_description = $result->Description;
 	}		
+	public function save(){
+		$db = new DB();
+		$queryResults = $db->insertDemand($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
+		return $queryResults;
+	}
 	
+	public function update(){
+		$db = new DB();
+		$queryResults = $db->updateDemand($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
+		return $queryResults;
+	}
+	
+	public function delete(){
+		$db = new DB();
+		$queryResults = $db->deleteDemand($this->_name);
+		return $queryResults;
+	}	
 	// Loads all demands in the database
 	public static function getAll(){
 		$db = new DB();
