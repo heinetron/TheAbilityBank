@@ -73,7 +73,7 @@ class DB {
 	}
 	
 	public function printTable($tableName){
-		$results = $this->query("SELECT * FROM $tableName);
+		$results = $this->query("SELECT * FROM $tableName");
 		
 		if($results){
 			var_dump($results);
@@ -157,7 +157,7 @@ class DB {
 	{
 		$sql = "UPDATE `Offer` SET `Description`=\"$description\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
 		if(!$this->query($sql)){
-			echo "Error updating user: " . mysql_error();
+			echo "Error updating offer: " . mysql_error();
 			return false;
 		}		
 		return true;
@@ -187,19 +187,38 @@ class DB {
 		}
 	}
 
-	public function insertDemand($name, $category, $description)
+	public function insertDemand($name, $description, $category_id,  $user_id)
 	{
 		// Insert data
-		$sql = "INSERT INTO `Demand`(`Name`, `Category`, `Description`) VALUES ('$name', '$category', '$description')";;
-		$result = $this->query($sql);
-		if(!$result){
+		$sql = "INSERT INTO `Demand`(`Name`, `Description`, `Category_id`, `User_id`) VALUES ('$name', '$description', '$category_id', '$user_id')";
+		
+		if(!$this->query($sql)){
 			echo "Error inserting demand: " . mysql_error();
 		}
 	}
+
+	public function updateDemand($name, $description, $category_id, $user_id)
+	{
+		$sql = "UPDATE `Demand` SET `Description`=\"$description\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
+		if(!$this->query($sql)){
+			echo "Error updating demand: " . mysql_error();
+			return false;
+		}		
+		return true;
+	}
+	
+	public function deleteDemand($name){
+		$sql = "DELETE FROM `Demand` WHERE `Name` = \"$name\"";
+		if(!$this->query($sql)){
+			echo "Error deleting demand: " . mysql_error();
+			return false;
+		}		
+		return true;		
+	}	
 }
 
 
-class DBQueryResult {p
+class DBQueryResult {
 
 	private $_results = array();
 	
