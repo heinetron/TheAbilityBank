@@ -12,7 +12,7 @@ function delete($get){
 	}
 	else if(isset($get['deleteDemand'])){
 		echo "Delete demand with id" . $get['deleteDemand'];
-		//Offer::withID($get['deleteDemand'])->delete();
+		//Demand::withID($get['deleteDemand'])->delete();
 	}
 }
 
