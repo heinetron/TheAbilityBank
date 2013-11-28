@@ -6,7 +6,6 @@ class User{
 	private $_email;
 	private $_password;
 	private $_salt;
-	//TODO private $_user;
 	
 	// Loads a user using the ID
 	// $user = User::withID(1)
@@ -136,16 +135,27 @@ class User{
 		
 }
 
-class Offer{
+// A service an be either an offer or a demand.
+class Service{
+	
+	// Constants to identify the type of service.
+	// $offerService = new Service(Service::TYPE_OFFER);
+	const TYPE_OFFER = "Offer";
+	const TYPE_DEMAND = "Demand";
 	
 	private $_id;
 	private $_name;
 	private $_category;
 	private $_description;
 	private $_user;
+	private $_serviceType;
 		
-	// Loads an offer using its ID
-	// $offer = Offer::withID(1)
+	function __construct($serviceType){
+		$this->_serviceType = $serviceType;
+	}
+		
+	// Loads a service using its ID
+	// $service = Service::withID(1)
 	public static function withID($id){
 		$instance = new self();
 		$instance->loadByID($id);
@@ -154,7 +164,7 @@ class Offer{
 	
 	private function loadByID($id){
 		$db = new DB();
-		$queryResults = $db->selectTableWithColumn("Offer", "id", $id);
+		$queryResults = $db->selectTableWithColumn("Service", "id", $id);
 		if($queryResults){
 			$this->fill($queryResults[0]);
 		} else {
@@ -162,8 +172,8 @@ class Offer{
 		}
 	}
 	
-	// Loads an offer using its name
-	// $offer = Offer::withName("Oferta1")
+	// Loads an service using its name
+	// $service = Service::withName("Oferta1")
 	public static function withName($name){
 		$instance = new self();
 		$instance->loadByName($name);
@@ -172,7 +182,7 @@ class Offer{
 	
 	private function loadByName($name){
 		$db = new DB();
-		$queryResults = $db->selectTableWithColumn("Offer", "Name", $name);
+		$queryResults = $db->selectTableWithColumn("Service", "Name", $name);
 		if($queryResults){
 			$this->fill($queryResults[0]);
 		} else {
@@ -184,64 +194,70 @@ class Offer{
 	private function fill(DBQueryResult $result){
 		$this->_id = $result->id;
 		$this->_name = $result->Name;
-		$this->_category = Category::withID($result->Category_id);
-		$this->_user = User::withID($result->User_id);
 		$this->_description = $result->Description;
+		$this->_serviceType = $result->ServiceType;
+		$this->_category = Category::withID($result->Category_id);
+		$this->_user = User::withID($result->User_id);		
 	}
 
 	public function save(){
 		$db = new DB();
-		$queryResults = $db->insertOffer($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
+		$queryResults = $db->insertService($this->_name, $this->_description, $this->_serviceType, $this->_category->getID(), $this->_user->getID());
 		return $queryResults;
 	}
 	
 	public function update(){
 		$db = new DB();
-		$queryResults = $db->updateOffer($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
+		$queryResults = $db->updateService($this->_name, $this->_description, $this->_serviceType, $this->_category->getID(), $this->_user->getID());
 		return $queryResults;
 	}
 	
 	public function delete(){
 		$db = new DB();
-		$queryResults = $db->deleteOffer($this->_name);
+		$queryResults = $db->deleteService($this->_name);
 		return $queryResults;
 	}		
 
-	// Loads all offers in the database
-	public static function getAll(){
+	// Loads all services in the database
+	public static function getAll($serviceType){
 		$db = new DB();
-		$queryResults = $db->selectAll("Offer");
-		$offers = array();
+		$queryResults = $db->selectTableWithColumn("Service", "ServiceType", $serviceType);
+		$services = array();
 		foreach($queryResults as $qr){
-			$offer = new Offer();
-			$offer->fill($qr);
-			$offers[] = $offer;
+			$service = new Service($serviceType);
+			$service->fill($qr);
+			$services[] = $service;
 		}
-		return $offers;
+		return $services;
 	}
+	
 	public function getID(){
 		return $this->_id;
 	}
 	public function getName(){
 		return $this->_name;
 	}
-	public function getCategory(){
-		return $this->_category;
-	}
 	public function getDescription(){
 		return $this->_description;
 	}
+	public function getServiceType(){
+		return $this->_serviceType;
+	}
+	public function getCategory(){
+		return $this->_category;
+	}	
 	public function getUser(){
 		return $this->_user;	
 	}
+	
 	public function setName($name){
 		$this->_name = $name;;
 	}
-	public function setCategory($category){
-		$this->_category = $category;
-	}
 	public function setDescription($description){
 		$this->_description = $description;
+	}	
+	public function setCategory($category){
+		$this->_category = $category;
 	}
 	public function setUser($user){
 		$this->_user = $user;	
@@ -249,126 +265,12 @@ class Offer{
 		
 	public function __toString(){
 		return "ID: " . $this->_id . 
+		" / Type: " . $this->_serviceType .
 		" / Name: " . $this->_name . 
 		" / Category: " . $this->_category->getName() .
 		" / User: " . $this->_user->getName();
 	}
 		
-}
-
-class Demand{
-	
-	private $_id;
-	private $_name;
-	private $_category;
-	private $_description;
-	private $_user;
-	
-	// Loads a demand using its ID
-	// $demand = Demand::withID(1)	
-	public static function withID($id){
-		$instance = new self();
-		$instance->loadByID($id);
-		return $instance;
-	}
-	
-	private function loadByID($id){
-		$db = new DB();
-		$queryResults = $db->selectTableWithColumn("Demand", "id", $id);
-		if($queryResults){
-			$this->fill($queryResults[0]);
-		} else {
-			return false;
-		}
-	}
-	// Loads a demand using its name
-	// $demand = Demand::withName("Demanda1")		
-	public static function withName($name){
-		$instance = new self();
-		$instance->loadByName($name);
-		return $instance;
-	}
-	
-	private function loadByName($name){
-		$db = new DB();
-		$queryResults = $db->selectTableWithColumn("Demand", "Name", $name);
-		if($queryResults){
-			$this->fill($queryResults[0]);
-		} else {
-			return false;
-		}
-	}
-
-	// Sets all attributes using a QueryResult array
-	private function fill(DBQueryResult $result){
-		$this->_id = $result->id;
-		$this->_name = $result->Name;
-		$this->_category = Category::withID($result->Category_id);
-		$this->_user = User::withID($result->User_id);
-		$this->_description = $result->Description;
-	}		
-	public function save(){
-		$db = new DB();
-		$queryResults = $db->insertDemand($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
-		return $queryResults;
-	}
-	
-	public function update(){
-		$db = new DB();
-		$queryResults = $db->updateDemand($this->_name, $this->_description, $this->_category->getID(), $this->_user->getID());
-		return $queryResults;
-	}
-	
-	public function delete(){
-		$db = new DB();
-		$queryResults = $db->deleteDemand($this->_name);
-		return $queryResults;
-	}	
-	// Loads all demands in the database
-	public static function getAll(){
-		$db = new DB();
-		$queryResults = $db->selectAll("Demand");
-		$demands = array();
-		foreach($queryResults as $qr){
-			$demand = new Demand();
-			$demand->fill($qr);
-			$demands[] = $demand;
-		}
-		return $demands;
-	}	
-	public function getID(){
-		return $this->_id;
-	}
-	public function getName(){
-		return $this->_name;
-	}
-	public function getCategory(){
-		return $this->_category;
-	}
-	public function getDescription(){
-		return $this->_description;
-	}
-	public function getUser(){
-		return $this->_user;
-	}
-	public function setName($name){
-		$this->_name = $name;;
-	}
-	public function setCategory($category){
-		$this->_category = $category;
-	}
-	public function setDescription($description){
-		$this->_description = $description;
-	}
-	public function setUser($user){
-		$this->_user = $user;	
-	}
-	public function __toString(){
-		return "ID: " . $this->_id . 
-		" / Name: " . $this->_name . 
-		" / Category: " . $this->_category->getName() .
-		" / User: " . $this->_user->getName();
-	}	
 }
 
 class Category{

@@ -17,9 +17,8 @@ class DB {
 		
 	$this->dbconnect();
     $res = mysql_query($sql);
-	echo "</br></br>";
-	echo $sql;
-	echo "</br></br>";
+	//echo "</br></br>";
+	//echo $sql;
     if ($res){
       if (strpos($sql,'SELECT') === false){
         return true;
@@ -127,94 +126,59 @@ class DB {
 		return true;		
 	}
 	
-	/////////////////////////////////////////////// OFFERS ////////////////////////////////////////////////
+	/////////////////////////////////////////////// SERVICE ////////////////////////////////////////////////
 
-	public function createOfferTable()
+	public function createServiceTable()
 	{
 		// Create table
-		$sql="CREATE TABLE IF NOT EXISTS Offer(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40), UNIQUE(Name), Category VARCHAR(40) NOT NULL, Description VARCHAR(120))";
+		$sql="CREATE TABLE `Service` (
+							`id` int(11) NOT NULL AUTO_INCREMENT,
+							`Name` varchar(40) NOT NULL,
+							`Description` varchar(120) DEFAULT NULL,
+							`ServiceType` char(6) NOT NULL DEFAULT 'Offer',
+							`Category_id` int(11) NOT NULL,
+							`User_id` int(11) NOT NULL,
+							PRIMARY KEY (`id`),
+							UNIQUE KEY `Name` (`Name`)
+							) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8";
 
 		// Execute query
 		if($this->query($sql)){
 			echo "Table created successfully";
 		}
 		else{
-			echo "Error creating Offer table: " . mysql_error();
+			echo "Error creating service table: " . mysql_error();
 		}
 	}
 
-	public function insertOffer($name, $description, $category_id,  $user_id)
+	public function insertService($name, $description, $serviceType, $category_id,  $user_id)
 	{
 		// Insert data
-		$sql = "INSERT INTO `Offer`(`Name`, `Description`, `Category_id`, `User_id`) VALUES ('$name', '$description', '$category_id', '$user_id')";
-		
+		$sql = "INSERT INTO `Service`(`Name`, `Description`, `ServiceType`, `Category_id`, `User_id`) VALUES  ('$name', '$description', '$serviceType' ,'$category_id', '$user_id')";
+		echo $sql;
 		if(!$this->query($sql)){
-			echo "Error inserting offer: " . mysql_error();
+			echo "Error inserting service: " . mysql_error();
 		}
 	}
 
-	public function updateOffer($name, $description, $category_id, $user_id)
+	public function updateService($name, $description, $serviceType, $category_id, $user_id)
 	{
-		$sql = "UPDATE `Offer` SET `Description`=\"$description\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
+		$sql = "UPDATE `Service` SET `Description`=\"$description\",`ServiceType`=\"$serviceType\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
 		if(!$this->query($sql)){
-			echo "Error updating offer: " . mysql_error();
+			echo "Error updating service: " . mysql_error();
 			return false;
 		}		
 		return true;
 	}
 	
-	public function deleteOffer($name){
-		$sql = "DELETE FROM `Offer` WHERE `Name` = \"$name\"";
+	public function deleteService($name){
+		$sql = "DELETE FROM `Service` WHERE `Name` = \"$name\"";
 		if(!$this->query($sql)){
-			echo "Error deleting offer: " . mysql_error();
+			echo "Error deleting service: " . mysql_error();
 			return false;
 		}		
 		return true;		
-	}	
-	/////////////////////////////////////////////// DEMANDS ////////////////////////////////////////////////
-
-	public function createDemandTable()
-	{
-		// Create table
-		$sql="CREATE TABLE IF NOT EXISTS Demand(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40), UNIQUE(Name), Category VARCHAR(40), Description VARCHAR(120) NOT NULL)";
-
-		// Execute query
-		if($this->query($sql)){
-			echo "Table created successfully";
-		}
-		else{
-			echo "Error creating Demand table: " . mysql_error();
-		}
-	}
-
-	public function insertDemand($name, $description, $category_id,  $user_id)
-	{
-		// Insert data
-		$sql = "INSERT INTO `Demand`(`Name`, `Description`, `Category_id`, `User_id`) VALUES ('$name', '$description', '$category_id', '$user_id')";
-		
-		if(!$this->query($sql)){
-			echo "Error inserting demand: " . mysql_error();
-		}
-	}
-
-	public function updateDemand($name, $description, $category_id, $user_id)
-	{
-		$sql = "UPDATE `Demand` SET `Description`=\"$description\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
-		if(!$this->query($sql)){
-			echo "Error updating demand: " . mysql_error();
-			return false;
-		}		
-		return true;
-	}
-	
-	public function deleteDemand($name){
-		$sql = "DELETE FROM `Demand` WHERE `Name` = \"$name\"";
-		if(!$this->query($sql)){
-			echo "Error deleting demand: " . mysql_error();
-			return false;
-		}		
-		return true;		
-	}	
+	}		
 }
 
 

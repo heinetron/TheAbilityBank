@@ -35,29 +35,22 @@
 	// }
 
 	
-	////////////////////////////////// OFFER TESTS ///////////////////////////////////
-	// CREATE, UPDATE, DELETE: PENDING
-	// $offer = new Offer();
-	// $offer->setName("Oferta3");
-	// $offer->setDescription("Descripcion oferta 3");
-	// $category = Category::withName("Pintura");
-	// $offer->setCategory($category);
-	// $user = User::withName("usuario");
-	// $offer->setUser($user);
+	////////////////////////////////// service TESTS ///////////////////////////////////
+	// // CREATE, UPDATE, DELETE: OK
+	 // $service = new Service(Service::TYPE_DEMAND);
+	 // $service->setName("Clases sueco");
+	 // $service->setDescription("Se busca profesor de sueco");
+	 // $category = Category::withName("Idiomas");
+	 // $service->setCategory($category);
+	 // $user = User::withName("Usuario3");
+	 // $service->setUser($user);
 	
-	
-	// //$offer->save();
-	// //$offer->delete();
-	// //$offer->update();
-	// foreach(Offer::getAll() as $offer){
-		// echo $offer;
+	// $service->save();
+	// //$service->delete();
+	// //$service->update();
+	// foreach(Service::getAll(Service::TYPE_DEMAND) as $service){
+		// echo $service;
 		// echo "</br>";
 	// }	
-	
-	// //
-	// // LOAD: OK
-	//$offer1 = Offer::withID(1);
-	//echo $offer1;
-	//$offer2 = Offer::withName("Offer2");
-	//echo $offer2;
+
 ?>
