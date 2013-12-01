@@ -218,8 +218,8 @@ class Service{
 		return $queryResults;
 	}		
 
-	// Loads all services in the database
-	public static function getAll($serviceType){
+	// Loads all services in the database based on the service type
+	public static function getAllWithServiceType($serviceType){
 		$db = new DB();
 		$queryResults = $db->selectTableWithColumn("Service", "ServiceType", $serviceType);
 		$services = array();
@@ -230,7 +230,18 @@ class Service{
 		}
 		return $services;
 	}
-	
+	// Loads all services
+	public static function getAll(){
+		$db = new DB();
+		$queryResults = $db->selectAll("Service");
+		$services = array();
+		foreach($queryResults as $qr){
+			$service = new Service($qr->ServiceType);
+			$service->fill($qr);
+			$services[] = $service;
+		}
+		return $services;
+	}	
 	public function getID(){
 		return $this->_id;
 	}

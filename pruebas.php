@@ -38,14 +38,14 @@
 	////////////////////////////////// service TESTS ///////////////////////////////////
 	// // CREATE, UPDATE, DELETE: OK
 	 // $service = new Service(Service::TYPE_DEMAND);
-	 // $service->setName("Clases sueco");
-	 // $service->setDescription("Se busca profesor de sueco");
+	 // $service->setName("Mecanico de motos");
+	 // $service->setDescription("Se busca mecanico de motos para arreglar la rueda de atras de mi Yamaha");
 	 // $category = Category::withName("Idiomas");
 	 // $service->setCategory($category);
 	 // $user = User::withName("Usuario3");
 	 // $service->setUser($user);
 	
-	// $service->save();
+	 // $service->save();
 	// //$service->delete();
 	// //$service->update();
 	// foreach(Service::getAll(Service::TYPE_DEMAND) as $service){
