@@ -2,17 +2,27 @@
 include 'backend/config.php';
 ?>
 <?php
-
-function delete($get){
-    if(isset($get['deleteService'])){
-		// TODO pop up "do you really want to delete it?"
-        //echo "Delete service with id" . $get['deleteService'];
-        Service::withID($get['deleteService'])->delete();
-    }
+function checkValidLogin($username, $password){
+	$valid = false;
+	if($username!="" and $password!=""){
+		$user = User::withName($username);
+		if($user->getName() != NULL){
+			if($user->checkPassword($password)){
+				$valid = true;
+			}
+		}
+	}
+	return $valid;
 }
 
-if ($_GET){
-    delete($_GET);
+function correctLogin($post){
+	$valid = false;
+	if($post['RegisterButton'] == 'Entrar'){
+		if(checkValidLogin($post['FullNameText'], $post['PasswdText'])){
+			$valid = true;
+		}
+	}
+	return $valid;
 }
 ?>
 
@@ -141,11 +151,11 @@ if ($_GET){
 			<div id="principal">			
 				<div id="loginbox">
 				<div id="logincontent">	
-					<div id="registerform" class="clearfix">
-						
-						<h6>Regístrate</h6>
-						
-						<form Name="form1" Method="POST" Action="variables.php">
+					<div id="registerform">
+							
+						<h5>Si todavía no tienes una cuenta</h5>
+
+						<form Name="form1" Method="POST" Action="registro.php">
 						
 						<p>Nombre completo</p>
 						<input type="Text" Name="FullNameText" placeholder="Nombre Apellidos">
@@ -164,19 +174,28 @@ if ($_GET){
 						</form>
 						
 					</div>				
-					<div id="loginform" class="clearfix">
+					<div id="loginform">
 			
-						<h6>Identifícate</h6>
-						
-						<form name="form1" method="POST" action="variables.php">
-						
+						<h5>Si ya eres cliente</h5>
+							
+						<form name="form1" method="POST" action="signup.php">
+						<?php if ($_POST){
+							$style="";
+							if(correctLogin($_POST)){
+								echo "<script>window.location = 'http://theabilitybank.dyndns.org/'</script>";
+							} else {
+								$style='style="border: 2px solid red"';
+								echo '<div class="wrongdata">Datos incorrectos</div>';
+							}
+						}
+						?>						
 						<p>Nombre completo</p>
-						<input type="Text" name="FullNameText" placeholder="Nombre Apellidos">
+						<input type="Text" name="FullNameText" placeholder="Nombre Apellidos" <?php echo $style?>>
 						
 						<p>Contraseña</p>
-						<input type="password" name="PasswdText" placeholder="Contraseña" autocomplete="off">
+						<input type="password" name="PasswdText" placeholder="Contraseña" autocomplete="off" <?php echo $style?>>
 						
-						<p> <input type="Submit" name="RegisterButton" value="Listo"> </p>
+						<p> <input type="Submit" name="RegisterButton" value="Entrar"> </p>
 						
 						</form>
 						
