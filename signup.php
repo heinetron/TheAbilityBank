@@ -138,53 +138,53 @@ if ($_GET){
 					</ul>
 				</div>
 			</div>
+			<div id="principal">			
+				<div id="loginbox">
+				<div id="logincontent">	
+					<div id="registerform" class="clearfix">
+						
+						<h6>Regístrate</h6>
+						
+						<form Name="form1" Method="POST" Action="variables.php">
+						
+						<p>Nombre completo</p>
+						<input type="Text" Name="FullNameText" placeholder="Nombre Apellidos">
+						
+						<p>Email</p>
+						<input type="Text" Name="EmailText" placeholder="Email">
+						
+						<p>Contraseña</p>
+						<input type="password" Name="PasswdText" placeholder="Contraseña" autocomplete="off">
+						
+						<p>Confirma la contraseña:</p>
+						<input type="password" Name="ConfirmedPasswdText" placeholder="Contraseña (otra vez)" autocomplete="off">
+						
+						<p> <input type="Submit" Name="RegisterButton" Value="Registrarse"> </p>
+						
+						</form>
+						
+					</div>				
+					<div id="loginform" class="clearfix">
 			
-			<!--
-            <div id="principal">
-				<fieldset>
-            <label for="user_email">With your email</label>
-            <input class="required email" id="user_email" name="user[email]" placeholder="e.g. me@domain.com" size="30" type="email">
-            <label for="user_full_name">Full Name</label>
-            <input class="required" id="user_full_name" maxlength="80" name="user[full_name]" placeholder="First Last" size="80" type="text" value="">
-            <div class="form-nested">
-              <label for="user_password">Password</label>
-              <input autocomplete="off" class="required form-small" id="user_password" minlength="4" name="user[password]" size="30" type="password">
-            </div>
-            <div class="form-nested second-to-last">
-              <label for="user_password_confirmation">Confirm Password</label>
-              <input autocomplete="off" class="required form-small" equalto="#user_password" id="user_password_confirmation" minlength="4" name="user[password_confirmation]" size="30" type="password">
-            </div>
-          
-            <input id="sign_up_code" name="sign_up_code" title="Promo code" type="hidden">
-            <button type="submit" class="btn btn-small btn-submit ralign" id="registration-submit" tabindex="">Sign up</button>
-          </fieldset>
-            </div>
-			-->
-			
-			<div id="principal">
-			
-			<Form Name="form1" Method="POST" Action="variables.php">
-			
-			<p>Nombre completo:</p>
-			<input type="Text" Name="FullNameText" Value="Nombre Apellidos">
-			
-			<p>Email:</p>
-			<input type="Text" Name="EmailText" Value="Email">
-			
-			<p>Contraseña</p>
-			<input type="Text" Name="PasswdText" Value="Contraseña">
-			
-			<p>Confirma la contraseña:</p>
-			<input type="Text" Name="ConfirmedPasswdText" Value="Contraseña (otra vez)">
-			
-			<p> <input type="Submit" Name="RegisterButton" Value="Registrarse"> </p>
-			
-			</Form>
-			
+						<h6>Identifícate</h6>
+						
+						<form name="form1" method="POST" action="variables.php">
+						
+						<p>Nombre completo</p>
+						<input type="Text" name="FullNameText" placeholder="Nombre Apellidos">
+						
+						<p>Contraseña</p>
+						<input type="password" name="PasswdText" placeholder="Contraseña" autocomplete="off">
+						
+						<p> <input type="Submit" name="RegisterButton" value="Listo"> </p>
+						
+						</form>
+						
+					</div>	
+				</div>
+				</div>
 			</div>
-			
-			</div>
-
+		</div>
         <script>
             function Todo(){
                 $(".ofertas").show();
