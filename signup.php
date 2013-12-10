@@ -1,5 +1,5 @@
 <?php
-include 'backend/config.php';
+require 'backend/config.php';
 ?>
 <?php
 function checkValidLogin($username, $password){
@@ -15,10 +15,10 @@ function checkValidLogin($username, $password){
 	return $valid;
 }
 
-function correctLogin($post){
+function validLogin($post){
 	$valid = false;
-	if($post['RegisterButton'] == 'Entrar'){
-		if(checkValidLogin($post['FullNameText'], $post['PasswdText'])){
+	if($post['RegisterButton'] == 'Iniciar sesión'){
+		if(checkValidLogin($post['UserNameText'], $post['PasswdText'])){
 			$valid = true;
 		}
 	}
@@ -51,83 +51,6 @@ function correctLogin($post){
 							</ul-->
 						</li>
 						<li><a href="#">Publicaciones</a>
-							<!--ul class="dropdown">
-								<li><a href="#">Crear demanda</a></li>
-								<li><a href="#">Crear oferta</a></li>
-								<!--<li><h3><a href="javascript:void(0)" onclick = "document.getElementById('light').style.display='block';
-									   document.getElementById('fade').style.display='block'">Crear oferta</a></h3></li>
-								<div id="light" class="white_content">
-
-									<form action="crear_oferta.php" method="post">
-										<div id="titformO">Título </div>
-
-										<input id="tittxtformO" type=text name="tituloOferta"  width="...">
-										<br>
-										<br>
-										<label id="catformO">Categoría</label>
-										<select id="selformO" name="CategoriaOferta">
-											<option value="Todo">Todo</option>
-											<option value="Jardineria">Jardinería</option>
-											<option value="Fontaneria">Fontanería</option>
-											<option value="Electricidad">Electricidad</option>
-											<option value="Cuidados de Personas">Cuidados de Personas</option>
-											<option value="Idiomas">Idiomas</option>
-											<option value="Musica">Música</option>
-											<option value="Otros">Otros</option>
-										</select>
-										<br>
-										<br>
-										<label id="descformO" >Descripción</label>
-										<textarea rows= "6" cols="40" id="desctxtformO" name="DescripcionOferta">
-										</textarea>
-										<br>
-										<br>
-										<a href="/index.php"><input type="submit" id="pubformO" name="Publicar" value="Publicar" onclick="irInicio()"/></a>
-										<a href="/index.php"><input type="button" id="cancformO"name="Cancelar" value="Cancelar" /></a>
-									</form>
-
-									<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';
-									document.getElementById('fade').style.display='none'">Close</a>
-								</div>
-								<div id="fade" class="black_overlay"></div>
-								<li><h3><a href="javascript:void(0)" onclick = "document.getElementById('light').style.display='block';
-									   document.getElementById('fade').style.display='block'">Crear demanda</a></h3></li>
-								<div id="light" class="white_content">
-
-									<form action="crear_demanda.php" method="post">
-										<div id="titform">Título </div>
-
-
-										<input id="tittxtform" type="text" name="tituloDemanda" style="width:320px">
-										<br>
-										<br>
-										<label id="catform">Categoría</label>
-										<select id="selform" name="CategoriaDemanda">
-											<option value="todo">Todo</option>
-											<option value="Jardineria">Jardinería</option>
-											<option value="Fontaneria">Fontanería</option>
-											<option value="Electricidad">Electricidad</option>
-											<option value="Cuidados de Personas">Cuidados de Personas</option>
-											<option value="Idiomas">Idiomas</option>
-											<option value="Musica">Música</option>
-											<option value="Otros">Otros</option>
-										</select>
-										<br>
-										<br>
-										<label id="descformD" >Descripción</label>
-										<textarea rows= "6" cols="40" id="desctxtform" name="descripcionDemanda">
-										</textarea>
-										<br>
-										<br>
-										<a href="/index.php"><input type="submit" id="pubformD" name="Publicar" value="Publicar" onclick="irInicio()"/></a>
-										<a href="/index.php"><input type="button" id="cancformd" name="Cancelar" value="Cancelar" /></a>
-									</form>
-
-									<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';
-									document.getElementById('fade').style.display='none'">Close</a>
-								</div>
-								<div id="fade" class="black_overlay"></div>
-							</ul -->
 						</li>
 						<li><a href="#">Noticias</a></li>
 						<li><a href="#">Contacto</a></li>
@@ -147,18 +70,21 @@ function correctLogin($post){
 						
 					</ul>
 				</div>
+                <hr>
 			</div>
 			<div id="principal">			
 				<div id="loginbox">
 				<div id="logincontent">	
+				
 					<div id="registerform">
-							
+						
+						<h2>Regístrate</h2>
 						<h5>Si todavía no tienes una cuenta</h5>
 
 						<form Name="form1" Method="POST" Action="registro.php">
 						
-						<p>Nombre completo</p>
-						<input type="Text" Name="FullNameText" placeholder="Nombre Apellidos">
+						<p>Nombre de usuario:</p>
+						<input type="Text" Name="UserNameText" placeholder="Nombre de usuario">
 						
 						<p>Email</p>
 						<input type="Text" Name="EmailText" placeholder="Email">
@@ -176,30 +102,34 @@ function correctLogin($post){
 					</div>				
 					<div id="loginform">
 			
+						<h2>Inicia sesión</h2>
 						<h5>Si ya eres cliente</h5>
 							
 						<form name="form1" method="POST" action="signup.php">
 						<?php if ($_POST){
 							$style="";
-							if(correctLogin($_POST)){
-								echo "<script>window.location = 'http://theabilitybank.dyndns.org/'</script>";
+							if(validLogin($_POST)){
+								// meter cookies
+								setcookie('usuariotab', $_POST['UserNameText'], time() + 365 * 24 * 60 * 60);
+								echo "<script>window.location = 'http://theabilitybank.dyndns.org/'</script>";	
 							} else {
 								$style='style="border: 2px solid red"';
 								echo '<div class="wrongdata">Datos incorrectos</div>';
 							}
 						}
 						?>						
-						<p>Nombre completo</p>
-						<input type="Text" name="FullNameText" placeholder="Nombre Apellidos" <?php echo $style?>>
+						<p>Nombre de usuario</p>
+						<input type="Text" name="UserNameText" placeholder="Nombre de usuario" <?php echo $style?>>
 						
 						<p>Contraseña</p>
 						<input type="password" name="PasswdText" placeholder="Contraseña" autocomplete="off" <?php echo $style?>>
 						
-						<p> <input type="Submit" name="RegisterButton" value="Entrar"> </p>
+						<p> <input type="Submit" name="RegisterButton" value="Iniciar sesión"> </p>
 						
 						</form>
 						
 					</div>	
+				
 				</div>
 				</div>
 			</div>
