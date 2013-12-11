@@ -3,18 +3,6 @@ require 'backend/config.php';
 ?>
 <?php
 
-/*function delete($get){
-    if(isset($get['deleteService'])){
-		// TODO pop up "do you really want to delete it?"
-        //echo "Delete service with id" . $get['deleteService'];
-        Service::withID($get['deleteService'])->delete();
-    }
-}
-
-if ($_GET){
-    delete($_GET);
-}
-*/
 if(isset($_GET['logout'])) {
 	setcookie("usuariotab","",time()-3600);
 	header('Location: /');
@@ -48,20 +36,19 @@ if(isset($_GET['logout'])) {
 						<!--<li><a href="/perfil.php">Perfil</a></li>-->
 						<li><a href="#">Noticias</a></li>
 						<li><a href="#">Contacto</a></li>
-
 						<li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
-  					</ul>
+					</ul>
 				</div>
 				<div id="menusecundario">
 					<ul>
-						<li><a href="#">Todo</a></li>
-						<li><a href="#">Jardinería</a></li>
-						<li><a href="#">Fontanería </a></li>
-						<li><a href="#">Electricidad</a></li>
-						<li><a href="#">Cuidado de Personas</a></li>
-						<li><a href="#">Música</a></li>
-						<li><a href="#">Idiomas</a></li>
-						<li><a href="#">Otros</a></li>
+						<li><a href="index.php">Todo</a></li>
+						<li><a href="index.php?categoria=Jardinería">Jardinería</a></li>
+						<li><a href="index.php?categoria=Fontanería">Fontanería </a></li>
+						<li><a href="index.php?categoria=Electricidad">Electricidad</a></li>
+						<li><a href="index.php?categoria=Cuidado de Personas">Cuidado de Personas</a></li>
+						<li><a href="index.php?categoria=Música">Música</a></li>
+						<li><a href="index.php?categoria=Idiomas">Idiomas</a></li>
+						<li><a href="index.php?categoria=Otros">Otros</a></li>
 						
 					</ul>
 				</div>
@@ -81,10 +68,15 @@ if(isset($_GET['logout'])) {
 
             <div id="principal">
                 <div id="lista">
-                   <?php
+                    <?php
+						$categoriaServicio = $_GET['categoria'];
+
+					
 						foreach(Service::getAll() as $service){
 							$name = $service->getName();
                             $category = $service->getCategory()->getName();
+							
+							
                             $description = $service->getDescription();
 							$class = "ofertas";
 							if ($service->getServiceType() == Service::TYPE_OFFER){
@@ -92,9 +84,18 @@ if(isset($_GET['logout'])) {
 							} else {
 								$class = "demandas";
 							}
-                            echo '<div class="servicio '.$class.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                            <a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser().'"><u>Ver</u></a></div>';
-
+							
+							
+							if ($categoriaServicio != null) {
+								if ($categoriaServicio == $category) {
+									echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+									<a href="index.php?deleteService='.$service->getID().'">Delete</a></div>';
+								}
+							}
+							else {
+								echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+								<a href="index.php?deleteService='.$service->getID().'">Delete</a></div>';
+							 }
 						}
                     ?>
                 </div>
