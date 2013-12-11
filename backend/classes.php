@@ -156,8 +156,8 @@ class Service{
 		
 	// Loads a service using its ID
 	// $service = Service::withID(1)
-	public static function withID($id){
-		$instance = new self();
+	public static function withID($id, $servicetype){
+		$instance = new self($servicetype);
 		$instance->loadByID($id);
 		return $instance;
 	}
@@ -174,8 +174,8 @@ class Service{
 	
 	// Loads an service using its name
 	// $service = Service::withName("Oferta1")
-	public static function withName($name){
-		$instance = new self();
+	public static function withName($name,$servicetype ){
+		$instance = new self($servicetype);
 		$instance->loadByName($name);
 		return $instance;
 	}
@@ -189,6 +189,23 @@ class Service{
 			return false;
 		}
 	}
+
+    // Loads an service using his user
+    public static function withUser($user,$servicetype ){
+        $instance = new self($servicetype);
+        $instance->loadByUser($user);
+        return $instance;
+    }
+
+    private function loadByUser($user){
+        $db = new DB();
+        $queryResults = $db->selectTableWithColumn("Service", "User", $user);
+        if($queryResults){
+            $this->fill($queryResults[0]);
+        } else {
+            return false;
+        }
+    }
 
 	// Sets all attributes using a QueryResult array
 	private function fill(DBQueryResult $result){
@@ -218,7 +235,21 @@ class Service{
 		return $queryResults;
 	}		
 
-	// Loads all services in the database based on the service type
+    //loads all services posted by one user
+
+    public static function getAllWithUser($user){
+        $db = new DB();
+        $queryResults = $db->selectTableWithColumn("Service", "User", $user);
+        $services = array();
+        foreach($queryResults as $qr){
+            $service = new Service($qr->ServiceType);
+            $service->fill($qr);
+            $services[] = $service;
+        }
+        return $services;
+    }
+
+    // Loads all services in the database based on the service type
 	public static function getAllWithServiceType($serviceType){
 		$db = new DB();
 		$queryResults = $db->selectTableWithColumn("Service", "ServiceType", $serviceType);

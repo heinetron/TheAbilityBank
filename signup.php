@@ -81,7 +81,7 @@ function validLogin($post){
 						<h2>Regístrate</h2>
 						<h5>Si todavía no tienes una cuenta</h5>
 
-						<form Name="form1" Method="POST" Action="registro.php">
+						<form Name="form1" Method="POST" Action="userRegistered.php">
 						
 						<p>Nombre de usuario:</p>
 						<input type="Text" Name="UserNameText" placeholder="Nombre de usuario">

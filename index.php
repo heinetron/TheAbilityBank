@@ -15,6 +15,11 @@ if ($_GET){
     delete($_GET);
 }
 */
+if(isset($_GET['logout'])) {
+	setcookie("usuariotab","",time()-3600);
+	header('Location: /');
+	exit;
+}
 ?>
 
 <html>
@@ -34,15 +39,16 @@ if ($_GET){
 				<div id="menucabecera">
 					<ul>
 						<li id="logo"></li>
-						<li><a href="/perfil.php">Perfil</a></li>
+                        <?php
+                        if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+                            echo '<li><a href="/perfil.php">'.$_COOKIE['usuariotab'].'</a></li>';
+                        } else {
+                            echo '<li><a href="/signup.php">Log in</a></li>';
+                        } ?>
+						<!--<li><a href="/perfil.php">Perfil</a></li>-->
 						<li><a href="#">Noticias</a></li>
 						<li><a href="#">Contacto</a></li>
-                        <?php 
-						if(isset($_COOKIE['usuariotab'])){
-							echo '<li><a href="#">Hola '.$_COOKIE['usuariotab'].'</a></li>';
-						} else {
-							echo '<li><a href="/signup.php">Log in</a></li>';
-						} ?>
+
 						<li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
   					</ul>
 				</div>

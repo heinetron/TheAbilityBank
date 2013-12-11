@@ -64,10 +64,10 @@ class DB {
 		// Execute query
 		$result = $this->query($sql);
 		if($result){
-			echo "Deleted all records from $tableName";
+			//echo "Deleted all records from $tableName";
 		}
 		else{
-			echo "Could not delete records from $tableName";
+			//echo "Could not delete records from $tableName";
 		}
 	}
 	
@@ -89,10 +89,10 @@ class DB {
 
 		// Execute query
 		if($this->query($sql)){
-			echo "Table created successfully";
+			//echo "Table created successfully";
 		}
 		else{
-			echo "Error creating User table: " . mysql_error();
+			//echo "Error creating User table: " . mysql_error();
 		}
 	}
 	
@@ -102,7 +102,7 @@ class DB {
 		$sql = "INSERT INTO `User`(`Name`, `Email`, `Password`, `Salt`, `Premium`) VALUES ('$name', '$email', '$password','$salt','$premium')";
 		
 		if(!$this->query($sql)){
-			echo "Error inserting user: " . mysql_error();
+			//echo "Error inserting user: " . mysql_error();
 			return false;
 		}
 		return true;
@@ -111,7 +111,7 @@ class DB {
 	{
 		$sql = "UPDATE `User` SET `Email`=\"$email\",`Password`=\"$password\",`Salt`=\"$salt\",`Premium`=\"$premium\" WHERE Name=\"$name\"";
 		if(!$this->query($sql)){
-			echo "Error updating user: " . mysql_error();
+			//echo "Error updating user: " . mysql_error();
 			return false;
 		}		
 		return true;
@@ -120,7 +120,7 @@ class DB {
 	public function deleteUser($name){
 		$sql = "DELETE FROM `User` WHERE `Name` = \"$name\"";
 		if(!$this->query($sql)){
-			echo "Error deleting user: " . mysql_error();
+			//echo "Error deleting user: " . mysql_error();
 			return false;
 		}		
 		return true;		
@@ -144,10 +144,10 @@ class DB {
 
 		// Execute query
 		if($this->query($sql)){
-			echo "Table created successfully";
+			//echo "Table created successfully";
 		}
 		else{
-			echo "Error creating service table: " . mysql_error();
+			//echo "Error creating service table: " . mysql_error();
 		}
 	}
 
@@ -155,9 +155,9 @@ class DB {
 	{
 		// Insert data
 		$sql = "INSERT INTO `Service`(`Name`, `Description`, `ServiceType`, `Category_id`, `User_id`) VALUES  ('$name', '$description', '$serviceType' ,'$category_id', '$user_id')";
-		echo $sql;
+		//echo $sql;
 		if(!$this->query($sql)){
-			echo "Error inserting service: " . mysql_error();
+			//echo "Error inserting service: " . mysql_error();
 		}
 	}
 
@@ -165,7 +165,7 @@ class DB {
 	{
 		$sql = "UPDATE `Service` SET `Description`=\"$description\",`ServiceType`=\"$serviceType\",`Category_id`=\"$category_id\",`User_id`=\"$user_id\" WHERE Name=\"$name\"";
 		if(!$this->query($sql)){
-			echo "Error updating service: " . mysql_error();
+			//echo "Error updating service: " . mysql_error();
 			return false;
 		}		
 		return true;
@@ -174,7 +174,7 @@ class DB {
 	public function deleteService($name){
 		$sql = "DELETE FROM `Service` WHERE `Name` = \"$name\"";
 		if(!$this->query($sql)){
-			echo "Error deleting service: " . mysql_error();
+			//echo "Error deleting service: " . mysql_error();
 			return false;
 		}		
 		return true;		

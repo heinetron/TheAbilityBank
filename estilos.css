@@ -1,15 +1,21 @@
-#bloque_izqda
-{
-margin-top: 150px;
-margin-right: 10px;
-margin-bottom: 150px;
-margin-left: 10px;
-float: left;
+body {
+background-color: #FFFAAA;
 }
 
-.body
+#bloque_izqda
 {
-width:100%
+float: left;
+width: 25%;
+}
+
+ul>li>a {
+margin-left:3%;
+font-size: 10pt;
+}
+
+.logo
+{
+text-align: center;
 }
 
 .titulo_menu
@@ -17,17 +23,60 @@ width:100%
 font-family: Arial;
 font-size: 16pt;
 font-weight: bold;
-width: 240px;
-margin: 10px;
+text-align: center;
+}
+
+.menu
+{
+/*border: 1px solid #003377;*/
+width: 50%;
+margin-left: 25%;
+}
+
+ul
+{
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+
+li
+{
+font-family: Arial;
+font-size: 12pt;
+margin: 4%;
+}
+
+a:link 
+{
+text-decoration:none;
+}
+
+a:visited 
+{
+text-decoration:none;
+}
+
+a:hover 
+{
+text-decoration:underline;
+}
+
+a:active 
+{
+text-decoration:underline;
+}
+
+#mantenimiento
+{
+text-align: center;
+margin-top: 32%;
 }
 
 #bloque_central
 {
-margin-top: 10px;
-margin-right: 100px;
-margin-bottom: 10px;
-margin-left: 100px;
 float: left;
+width: 50%;
 }
 
 .titulo_pagina
@@ -35,7 +84,7 @@ float: left;
 font-family: Arial;
 font-size: 32pt;
 font-weight: bold;
-margin-left: 200px;
+text-align: center;
 }
 
 .pestanya
@@ -43,20 +92,20 @@ margin-left: 200px;
 font-family: Arial;
 font-size: 16pt;
 font-weight: bold;
-width: 240px;
-margin: 25px;
 float: left;
+width: 33.3%;
+color: white;
+background: black;
+text-align: center;
 }
 
 .oferta
 {
 font-family: Arial;
 font-size: 12pt;
-color: white;
-width: 720px;
-heigth: 360px;
-padding: 10px;
-background: #0000FF;
+color: black;
+background: #FFCC66;
+padding: 4%;
 }
 
 .demanda
@@ -64,8 +113,71 @@ background: #0000FF;
 font-family: Arial;
 font-size: 12pt;
 color: white;
-width: 720px;
-heigth: 360px;
-padding: 10px;
-background: #008000;
+background: #FFAC66;
+padding: 4%;
+}
+
+#bloque_dcha
+{
+float: left;
+width: 25%;
+}
+
+#buscador
+{
+text-align:center;
+margin-top: 16%;
+}
+
+#usuarios
+{
+text-align:center;
+margin-top: 32%;
+}
+
+#idUsuario
+{
+margin-left: 16%;
+}
+
+.botonNegro {
+background-color: #000000;
+color: #FFFFFF;
+font: bold 11px Verdana,Geneva,Arial,Helvetica,sans-serif;
+}
+
+.letra-roja  {
+color: red;
+}
+
+.bordesRedondeados {
+	border-radius:7px; 
+	-moz-border-radius:7px; /* Firefox */ 
+	-webkit-border-radius:7px; /* Safari y Chrome */
+}
+
+.bordesIzq {
+	border-radius: 7px 0 0 7px; 
+	-moz-border-radius:7px 0 0 7px; /* Firefox */ 
+	-webkit-border-radius:7px 0 0 7px; /* Safari y Chrome */
+}
+
+.bordesDrch{
+	border-radius:0 7px 7px 0; 
+	-moz-border-radius:0 7px 7px 0; /* Firefox */ 
+	-webkit-border-radius:0 7px 7px 0; /* Safari y Chrome */
+}
+
+.bordesUnoSiUnoNo {
+	border-radius: 50% 0 50% 0; 
+	-moz-border-radius:50% 0 50% 0; /* Firefox */ 
+	-webkit-border-radius:50% 0 50% 0; /* Safari y Chrome */
+}
+
+.botonMenu {
+	font-family: Arial;
+	font-size: 16pt;
+	font-weight: bold;
+	background: #99df7c;
+	text-align: center;
 }
