@@ -84,17 +84,17 @@ if(isset($_GET['logout'])) {
 							} else {
 								$class = "demandas";
 							}
-							
+
 							
 							if ($categoriaServicio != null) {
 								if ($categoriaServicio == $category) {
 									echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-									<a href="index.php?deleteService='.$service->getID().'">Delete</a></div>';
+                             		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser().'"><u>Ver</u></a></div>';
 								}
 							}
 							else {
-								echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-								<a href="index.php?deleteService='.$service->getID().'">Delete</a></div>';
+									echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+                            		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser().'"><u>Ver</u></a></div>';
 							 }
 						}
                     ?>
