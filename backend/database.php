@@ -185,8 +185,16 @@ class DB {
 	public function createMessageTable()
 	{
 		// Create message
-		$sql="CREATE TABLE IF NOT EXISTS Mensaje(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Asunto VARCHAR(200) NOT NULL, Cuerpo VARCHAR(1000) NOT NULL, Leido INT NOT NULL, Fecha_envio INT NOT NULL, Emisor INT NOT NULL, Receptor INT NOT NULL);";
-
+		$sql = "CREATE TABLE `Message` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			 `Subject` varchar(200) NOT NULL,
+			 `Body` varchar(1000) NOT NULL,
+			 `Read` int(11) NOT NULL,
+			 `Date` int(11) NOT NULL,
+			 `Sender` int(11) NOT NULL,
+			 `Receiver` int(11) NOT NULL,
+			 PRIMARY KEY (`id`)
+			) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8";
 		// Execute query
 		if($this->query($sql)){
 			//echo "Table created successfully";
@@ -196,10 +204,10 @@ class DB {
 		}
 	}
 	
-	public function insertMessage($asunto, $cuerpo, $leido, $fecha_envio, $emisor, $receptor)
+	public function insertMessage($subject, $body, $read, $date, $sender, $receiver)
 	{
 		// Insert data		
-		$sql = "INSERT INTO `Mensaje`(`Asunto`, `Cuerpo`, `Leido`, `Fecha_envio`, `Emisor`, `Receptor`) VALUES ('$asunto', '$cuerpo', '$leido', '$fecha_envio', '$emisor', '$receptor')";
+		$sql = "INSERT INTO `Message`(`subject`, `body`, `read`, `date`, `sender`, `receiver`) VALUES ('$subject', '$body', '$read', '$date', '$sender', '$receiver')";
 		
 		if(!$this->query($sql)){
 			echo "Error inserting message: " . mysql_error();
@@ -208,9 +216,9 @@ class DB {
 		echo "Row inserted";
 		return true;
 	}
-	public function updateMessage($id, $asunto, $cuerpo, $leido, $fecha_envio, $emisor, $receptor)
+	public function updateMessage($id, $subject, $body, $read, $date, $sender, $receiver)
 	{
-		$sql = "UPDATE `Mensaje` SET `id`='$id', `Asunto`='$asunto',`Cuerpo`='$cuerpo',`Leido`='$leido',`Fecha_envio`='$fecha_envio',`Emisor`='$emisor',`Receptor`='$receptor' WHERE `id`='$id'";
+		$sql = "UPDATE `Message` SET `id`='$id', `subject`='$subject',`body`='$body',`read`='$read',`date`='$date',`sender`='$sender',`receiver`='$receiver' WHERE `id`='$id'";
 		if(!$this->query($sql)){
 			echo "Error updating message: " . mysql_error();
 			return false;
@@ -220,7 +228,7 @@ class DB {
 	}
 	
 	public function deleteMessage($id){
-		$sql = "DELETE FROM `Mensaje` WHERE `id`='$id'";
+		$sql = "DELETE FROM `Message` WHERE `id`='$id'";
 		if(!$this->query($sql)){
 			echo "Error deleting message: " . mysql_error();
 			return false;
