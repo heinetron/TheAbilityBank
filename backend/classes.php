@@ -384,4 +384,150 @@ class Category{
 		" / Name: " . $this->_name;
 	}	
 }
+
+////////////////////////// MESSAGES
+
+class Message{
+	private $_id;
+	private $_subject;
+	private $_body;
+	private $_read;
+	private $_date;
+	private $_sender;
+	private $_receiver;
+	
+	// Carga un mensaje usando su id
+	// $message = Message::withID(1)
+	public static function withID($id){
+		$instance = new self();
+		$instance->loadByID($id);
+		return $instance;
+	}
+	
+	private function loadByID($id){
+		$db = new DB();
+		$queryResults = $db->selectTableWithColumn("Message", "id", $id);
+		if($queryResults){
+			$this->fill($queryResults[0]);
+		} else {
+			return false;
+		}
+	}
+	
+	// Carga un mensaje usando su subject
+	// $message = Message::withName("subject")
+	public static function withsubject($subject){
+		$instance = new self();
+		$instance->loadBysubject($subject);
+		return $instance;
+	}
+	
+	private function loadBysubject($subject){
+		$db = new DB();
+		$queryResults = $db->selectTableWithColumn("Message", "subject", $subject);
+		if($queryResults){
+			$this->fill($queryResults[0]);
+		} else {
+			return false;
+		}
+	}
+
+	// Sets all attributes using a QueryResult array
+	private function fill(DBQueryResult $result){
+		$this->_id = $result->id;
+		$this->_subject = $result->Subject;
+		$this->_body = $result->Body;
+		$this->_read = $result->Read;
+		$this->_date = $result->Date;
+		$this->_sender = $result->Sender;
+		$this->_receiver = $result->Receiver;
+	}
+	
+	public function save(){
+		$db = new DB();
+		$queryResults = $db->insertMessage($this->_subject, $this->_body, $this->_read, $this->_date, $this->_sender, $this->_receiver);
+		return $queryResults;
+	}
+	
+	public function update(){
+		$db = new DB();
+		$queryResults = $db->updateMessage($this->_subject, $this->_body, $this->_read, $this->_date, $this->_sender, $this->_receiver);
+		return $queryResults;
+	}
+	
+	public function delete(){
+		$db = new DB();
+		$queryResults = $db->deleteMessage($this->_id);
+		return $queryResults;
+	}
+		
+	// Loads all messages in the database
+	public static function getAll(){
+		$db = new DB();
+		$queryResults = $db->selectAll("Message");
+		$messages = array();
+		foreach($queryResults as $qr){
+			$message = new Message();
+			$message->fill($qr);
+			$messages[] = $message;
+		}
+		return $messages;
+	}
+
+	public function getID(){
+		return $this->_id;
+	}
+	public function getSubject(){
+		return $this->_subject;
+	}
+	public function getBody(){
+		return $this->_body;
+	}
+	public function getRead(){
+		return $this->_read;
+	}
+	public function getDate(){
+		return $this->_date;
+	}
+	public function getSender(){
+		return $this->_sender;
+	}
+	public function getReceiver(){
+		return $this->_receiver;
+	}
+	
+	public function setSubject($subject){
+		$this->_subject = $subject;
+	}
+	public function setBody($body){
+		$this->_body = $body;
+	}
+	public function setRead($read){
+		$this->_read = $read;
+	}
+	public function setDate($date){
+		$this->_date = $date;
+	}
+	public function setSender($sender){
+		$this->_sender = $sender;
+	}
+	public function setReceiver($receiver){
+		$this->_receiver = $receiver;
+	}
+
+	public function __toString(){
+		return "ID: " . $this->_id . 
+		" / subject: " . $this->_subject . 
+		" / body: " . $this->_body .
+		" / read: " . $this->_read . 
+		" / Fecha envio: " . $this->_date .
+		" / sender: " . $this->_sender . 
+		" / receiver: " . $this->_receiver;
+		
+	}
+		
+}
+
+
+
 ?>
