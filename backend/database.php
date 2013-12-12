@@ -178,7 +178,57 @@ class DB {
 			return false;
 		}		
 		return true;		
-	}		
+	}
+
+	/////////////////////////////////////////////// MESSAGES ////////////////////////////////////////////////
+
+	public function createMessageTable()
+	{
+		// Create message
+		$sql="CREATE TABLE IF NOT EXISTS Mensaje(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Asunto VARCHAR(200) NOT NULL, Cuerpo VARCHAR(1000) NOT NULL, Leido INT NOT NULL, Fecha_envio INT NOT NULL, Emisor INT NOT NULL, Receptor INT NOT NULL);";
+
+		// Execute query
+		if($this->query($sql)){
+			//echo "Table created successfully";
+		}
+		else{
+			//echo "Error creating Message table: " . mysql_error();
+		}
+	}
+	
+	public function insertMessage($asunto, $cuerpo, $leido, $fecha_envio, $emisor, $receptor)
+	{
+		// Insert data		
+		$sql = "INSERT INTO `Mensaje`(`Asunto`, `Cuerpo`, `Leido`, `Fecha_envio`, `Emisor`, `Receptor`) VALUES ('$asunto', '$cuerpo', '$leido', '$fecha_envio', '$emisor', '$receptor')";
+		
+		if(!$this->query($sql)){
+			echo "Error inserting message: " . mysql_error();
+			return false;
+		}
+		echo "Row inserted";
+		return true;
+	}
+	public function updateMessage($id, $asunto, $cuerpo, $leido, $fecha_envio, $emisor, $receptor)
+	{
+		$sql = "UPDATE `Mensaje` SET `id`='$id', `Asunto`='$asunto',`Cuerpo`='$cuerpo',`Leido`='$leido',`Fecha_envio`='$fecha_envio',`Emisor`='$emisor',`Receptor`='$receptor' WHERE `id`='$id'";
+		if(!$this->query($sql)){
+			echo "Error updating message: " . mysql_error();
+			return false;
+		}
+		echo "Row updated";		
+		return true;
+	}
+	
+	public function deleteMessage($id){
+		$sql = "DELETE FROM `Mensaje` WHERE `id`='$id'";
+		if(!$this->query($sql)){
+			echo "Error deleting message: " . mysql_error();
+			return false;
+		}
+		echo "Row deleted";
+		return true;		
+	}
+	
 }
 
 
