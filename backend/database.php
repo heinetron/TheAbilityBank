@@ -237,6 +237,11 @@ class DB {
 		return true;		
 	}
 	
+	public function selectUserMessages($userID) {
+		$results = $this->query("SELECT * FROM `Message` WHERE `sender` = '$userID' OR `receiver` = $userID");
+		return $results;
+	}
+	
 }
 
 
