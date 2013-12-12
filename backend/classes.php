@@ -416,21 +416,23 @@ class Message{
 	
 	// Carga un mensaje usando su subject
 	// $message = Message::withName("subject")
-	public static function withsubject($subject){
+	public static function withSubject($subject){
 		$instance = new self();
-		$instance->loadBysubject($subject);
+		$instance->loadBySubject($subject);
 		return $instance;
 	}
 	
-	private function loadBysubject($subject){
+	private function loadBySubject($subject){
 		$db = new DB();
-		$queryResults = $db->selectTableWithColumn("Message", "subject", $subject);
+		$queryResults = $db->selectTableWithColumn("Message", "Subject", $subject);
 		if($queryResults){
 			$this->fill($queryResults[0]);
 		} else {
 			return false;
 		}
 	}
+	
+	
 
 	// Sets all attributes using a QueryResult array
 	private function fill(DBQueryResult $result){
@@ -474,6 +476,16 @@ class Message{
 		return $messages;
 	}
 
+	public static function getMessagesByUserID($userID) {
+		$db = new DB();
+		$messages = $db->selectUserMessages($userID);
+		return $messages;
+	}
+	public static function getMessagesByUserName($username) {
+		$user = User::withName($username);
+		return getAllByUserID($user->getID());
+	}
+	
 	public function getID(){
 		return $this->_id;
 	}
