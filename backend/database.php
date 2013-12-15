@@ -179,7 +179,11 @@ class DB {
 		}		
 		return true;		
 	}
-
+	
+	public function selectUserServices($userID) {
+		$results = $this->query("SELECT * FROM `Service` WHERE `User_id` = '$userID'");
+		return $results;
+	}
 	/////////////////////////////////////////////// MESSAGES ////////////////////////////////////////////////
 
 	public function createMessageTable()

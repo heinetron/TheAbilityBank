@@ -61,17 +61,19 @@ if ($_GET){
 
             <table id="publicaciones">
                 <?php
-                $user=User::withName($_COOKIE['usuariotab']);
+                $username = $_COOKIE['usuariotab'];
+				$services = Service::getAllByUserName($username);
+                if($services != null){
+					foreach($services as $service){
+						$name = $service->getName();
+						$category = $service->getCategory()->getName();
+						$description = $service->getDescription();
 
-                foreach(Service::getAll() as $service){
-                    $name = $service->getName();
-                    $category = $service->getCategory()->getName();
-                    $description = $service->getDescription();
-
-                    echo '<tr><td>'.$category.'</td> <td> '.$name.'</td> <td> '.$description.'</td>
-                             <td id="modificar">Modificar</td>
-                             <td id="borrar"><a href="perfil.php?deleteService='.$service->getID().'&serviceType='.$service->getServiceType().'">Borrar</a></td></tr>';
-                }
+						echo '<tr><td>'.$category.'</td> <td> '.$name.'</td> <td> '.$description.'</td>
+								 <td id="modificar">Modificar</td>
+								 <td id="borrar"><a href="perfil.php?deleteService='.$service->getID().'&serviceType='.$service->getServiceType().'">Borrar</a></td></tr>';
+					}
+				}
                 ?>
 
 

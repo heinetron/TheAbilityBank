@@ -236,19 +236,21 @@ class Service{
 	}		
 
     //loads all services posted by one user
-
-    public static function getAllWithUser($userID){
-        $db = new DB();
-        $queryResults = $db->selectTableWithColumn("Service", "User", $userID);
-        $services = array();
-        foreach($queryResults as $qr){
-            $service = new Service($qr->ServiceType);
-            $service->fill($qr);
-            $services[] = $service;
-        }
-        return $services;
-    }
-
+	public static function getAllByUserID($userID) {
+		$db = new DB();
+		$queryResults = $db->selectUserServices($userID);
+		$services = array();
+		foreach($queryResults as $qr){
+			$service = new Service($qr->ServiceType);
+			$service->fill($qr);
+			$services[] = $service;
+		}
+		return $services;
+	}
+	public static function getAllByUserName($username) {
+		$user = User::withName($username);
+		return Service::getAllByUserID($user->getID());
+	}
     // Loads all services in the database based on the service type
 	public static function getAllWithServiceType($serviceType){
 		$db = new DB();
