@@ -1,20 +1,5 @@
 <?php
 include 'backend/config.php';
-
-
-
-function delete($get){
-    if(isset($get['deleteService'])){
-		// TODO pop up "do you really want to delete it?"
-        //echo "Delete service with id" . $get['deleteService'];
-        Service::withID($get['deleteService'],$get['serviceType'])->delete();
-    }
-}
-
-if ($_GET){
-    delete($_GET);
-}
-
 ?>
 
 <html>
@@ -55,23 +40,40 @@ if ($_GET){
                 <li><a href="/index.php?logout">Cerrar sesión</a></li>
             </ul>
         </div>
+        <div id="seleccion">
+            <table>
+                <tr>
+                    <td id="b_todo" onclick="Intereses()">INTERESES EN MIS POSTS</td>
+                    <td id="b_todo" onclick="Mensajes()">MENSAJES PRIVADOS</td>
+                    <td id="b_todo" onclick="Notificaciones()">NOTIFICACIONES</td>
 
+
+                </tr>
+            </table>
+            <hr>
+        </div>
 
         <div id="principal">
 
             <table id="publicaciones">
                 <?php
-                $user=User::withName($_COOKIE['usuariotab']);
+                $username= $_COOKIE['usuariotab'];
+				
+				$messages = Message::getMessagesByUserName($username);
+                if($messages != null){
+					foreach($messages as $message){
+						$senderID = $message->getSender();
+						$sender = User::withID($senderID);
+						$date = $message->getDate();
+						$subject = $message->getSubject();
+						$body = $message->getBody();
+						$read = $message->getRead();
 
-                foreach(Service::getAll() as $service){
-                    $name = $service->getName();
-                    $category = $service->getCategory()->getName();
-                    $description = $service->getDescription();
-
-                    echo '<tr><td>'.$category.'</td> <td> '.$name.'</td> <td> '.$description.'</td>
-                             <td id="modificar">Modificar</td>
-                             <td id="borrar"><a href="perfil.php?deleteService='.$service->getID().'&serviceType='.$service->getServiceType().'">Borrar</a></td></tr>';
-                }
+						echo '<tr><td>'.$sender->getName().'</td> <td> '.$date.'</td> <td> '.$subject.'</td> <td> '.$body.'</td>
+										<td id="leido">Leído</td>
+										<td id="borrar">Borrar</td>';
+					}
+				}
                 ?>
 
 
@@ -79,7 +81,26 @@ if ($_GET){
 
 
         </div>
+        <script>
+            function Intereses(){
+                $(".interests").show();
+                $(".msg").hide();
+                $(".notices").hide();
+            }
+
+            function Mensajes(){
+                $(".interests").hide();
+                $(".msg").show();
+                $(".notices").hide();
+            }
+
+            function Notificaciones(){
+                $(".interests").hide();
+                $(".msg").hide();
+                $(".notices").show();
+            }
+            </script>
 
 
-</body>
+         </body>
 </html>

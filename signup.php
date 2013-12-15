@@ -43,19 +43,29 @@ function validLogin($post){
 				<div id="menucabecera">
 					<ul>
 						<li id="logo"></li>
-						<li><a href="/perfil.php">Perfil</a>
+						<li><a href="/index.php">Home</a>
 							<!--ul class="dropdown">
 								<li><a href="#">Correo interno</a></li>
 								<li><a href="#">Editar perfil</a></li>
 								<li><a href="#">Salir</a></li>
 							</ul-->
 						</li>
-						<li><a href="#">Publicaciones</a>
-						</li>
+                        <?php
+                        if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+
+                            echo '<li><a href="/perfil.php">'.ucfirst($_COOKIE['usuariotab']).'</a></li>';
+                        } else {
+                            echo '<li><a href="/signup.php">Log in</a></li>';
+                        } ?>
+
 						<li><a href="#">Noticias</a></li>
 						<li><a href="#">Contacto</a></li>
-						<li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
-					</ul>
+						<li><form id="formBus" name="formBus" method="get" action="" >
+                                <input id="buscar" name="buscar" type="text" placeholder="BuscarServicio" size="15" >
+                                <input id="Bbuscar" type="submit" VALUE="Buscar" onclick=href="index.php?buscar="document.formBus['buscar'] >
+                            </form></li>
+                    </ul>
+
 				</div>
 				<div id="menusecundario">
 					<ul>

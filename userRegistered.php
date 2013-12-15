@@ -29,24 +29,23 @@ function checkValidRegister($name, $email, $password, $re_password) {
 			<div id="cabecera" class="menu">
 				<div id="menucabecera">
 					<ul>
-						<li id="logo"></li>
-						<li><a href="/perfil.php">Perfil</a>
-						</li>
-						<li><a href="#">Publicaciones</a>
-						</li>
-						<li><a href="#">Noticias</a></li>
-						<li><a href="#">Contacto</a></li>
-						<li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
-					</ul>
+                        <ul>
+                            <li id="logo"></li>
+                            <li><a href="/index.php">Home</a></li>
+                            <li><a href="/signup.php">Log in</a></li>
+                            <li><a href="#">Noticias</a></li>
+                            <li><a href="#">Contacto</a></li>
+                            <li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
+                        </ul>					
 				</div>
 				<div id="menusecundario">
 					<ul>
 						<li><a href="#">Todo</a></li>
-						<li><a href="#">Jardinería</a></li>
-						<li><a href="#">Fontanería </a></li>
+						<li><a href="#">JardinerÃ­a</a></li>
+						<li><a href="#">FontanerÃ­a </a></li>
 						<li><a href="#">Electricidad</a></li>
 						<li><a href="#">Cuidado de Personas</a></li>
-						<li><a href="#">Música</a></li>
+						<li><a href="#">MÃºsica</a></li>
 						<li><a href="#">Idiomas</a></li>
 						<li><a href="#">Otros</a></li>
 						
@@ -85,9 +84,9 @@ function checkValidRegister($name, $email, $password, $re_password) {
 							echo "<h1>Error</h1>";
 						}
 						
-						echo '<form Name="form1" Method="POST" Action="index.php">	
+						echo '<form Name="form1" Method="POST" Action="index.php">
 						<p> <input type="Submit" Name="BackToIndexButton" Value="Volver al inicio"> </p>
-						
+
 						</form>';
 
 					?>

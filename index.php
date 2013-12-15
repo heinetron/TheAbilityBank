@@ -27,17 +27,30 @@ if(isset($_GET['logout'])) {
 				<div id="menucabecera">
 					<ul>
 						<li id="logo"></li>
+                        <li><a href="/index.php">Home</a></li>
                         <?php
+
+
+
                         if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
-                            echo '<li><a href="/perfil.php">'.$_COOKIE['usuariotab'].'</a></li>';
+                            echo '<li><a href="/perfil.php">'.ucfirst($_COOKIE['usuariotab']).'</a></li>';
                         } else {
                             echo '<li><a href="/signup.php">Log in</a></li>';
                         } ?>
 						<!--<li><a href="/perfil.php">Perfil</a></li>-->
 						<li><a href="#">Noticias</a></li>
 						<li><a href="#">Contacto</a></li>
-						<li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
+						<li><form id="formBus" name="formBus" method="get" action="" >
+                                <input id="buscar" name="buscar" type="text" placeholder="BuscarServicio" size="15" >
+                                <input id="Bbuscar" type="submit" VALUE="Buscar" onclick="Buscar()" >
+                            </form></li>
 					</ul>
+                    <script>
+                        function Buscar(){
+                            window.location= "?buscar="document.formBus['buscar'];
+
+                        }
+                    </script>
 				</div>
 				<div id="menusecundario">
 					<ul>
@@ -59,6 +72,21 @@ if(isset($_GET['logout'])) {
 							<td id="b_todo" onclick="Todo()">TODO</td>
 							<td id="b_ofer" onclick="Offer()">OFERTAS</td>
 							<td id="b_deman" onclick="Demand()">DEMANDAS</td>
+                            <?php
+                            if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+                                echo '<td id="b_todo" onclick=ToMyPosts()>MIS PUBLICACIONES</td>';
+                            }
+                            else{
+                                echo '<td id="b_todo" onclick=ToSignUp()>MIS PUBLICACIONES</td>';
+                            }
+                            if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+                                echo '<td id="b_todo" onclick=ToCreateService()>CREAR OFERTA/DEMANDA</td>';
+                            }
+                            else{
+                                echo '<td id="b_todo" onclick=ToSignUp()>CREAR OFERTA/DEMANDA</td>';
+                            }
+                            ?>
+
 						</tr>
 					</table>
                     <hr>
@@ -66,17 +94,29 @@ if(isset($_GET['logout'])) {
 
 			</div>
 
+
             <div id="principal">
                 <div id="lista">
                     <?php
-						$categoriaServicio = $_GET['categoria'];
+                    if (isset($_GET['categoria'])){
+                        $categoriaServicio = $_GET['categoria'];
+                    }
+                    else {
+                        $categoriaServicio = "vacio";
+                    }
+
+                    if (isset($_GET['buscar'])){
+                        $buscarServicio = $_GET['buscar'];
+                    }
+                    else {
+                        $buscarServicio = "vacio";
+                    }
 
 					
 						foreach(Service::getAll() as $service){
 							$name = $service->getName();
                             $category = $service->getCategory()->getName();
-							
-							
+
                             $description = $service->getDescription();
 							$class = "ofertas";
 							if ($service->getServiceType() == Service::TYPE_OFFER){
@@ -85,17 +125,23 @@ if(isset($_GET['logout'])) {
 								$class = "demandas";
 							}
 
-							
-							if ($categoriaServicio != null) {
-								if ($categoriaServicio == $category) {
-									echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                             		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser().'"><u>Ver</u></a></div>';
-								}
-							}
-							else {
-									echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                            		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser().'"><u>Ver</u></a></div>';
-							 }
+
+                            if ($categoriaServicio != "vacio") {
+                                if ($categoriaServicio == $category) {
+                                    echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+                             		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria= '.$categoriaServicio.'"><u>Ver</u></a></div>';
+                                }
+                            }
+                            else if ($buscarServicio != "vacio" && $buscarServicio != null) {
+                                if (strstr($description, $buscarServicio)) {
+                                    echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+                            		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$categoriaServicio.'"><u>Ver</u></a></div>';
+                                }
+                            }
+                            else {
+                                echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+                            	<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$categoriaServicio.'"><u>Ver</u></a></div>';
+                            }
 						}
                     ?>
                 </div>
@@ -118,6 +164,21 @@ if(isset($_GET['logout'])) {
                 $(".ofertas").hide();
                 $(".demandas").show();
             }
+
+            function ToMyPosts(){
+                self.open("/perfil.php", "_self");
+
+            }
+
+            function ToSignUp(){
+                self.open("/signup.php", "_self");
+            }
+
+            function ToCreateService(){
+                self.open("/createservice.php", "_self")
+            }
+
+
         </script>
     </body>
 

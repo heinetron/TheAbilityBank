@@ -237,9 +237,9 @@ class Service{
 
     //loads all services posted by one user
 
-    public static function getAllWithUser($user){
+    public static function getAllWithUser($userID){
         $db = new DB();
-        $queryResults = $db->selectTableWithColumn("Service", "User", $user);
+        $queryResults = $db->selectTableWithColumn("Service", "User", $userID);
         $services = array();
         foreach($queryResults as $qr){
             $service = new Service($qr->ServiceType);
@@ -416,21 +416,23 @@ class Message{
 	
 	// Carga un mensaje usando su subject
 	// $message = Message::withName("subject")
-	public static function withsubject($subject){
+	public static function withSubject($subject){
 		$instance = new self();
-		$instance->loadBysubject($subject);
+		$instance->loadBySubject($subject);
 		return $instance;
 	}
 	
-	private function loadBysubject($subject){
+	private function loadBySubject($subject){
 		$db = new DB();
-		$queryResults = $db->selectTableWithColumn("Message", "subject", $subject);
+		$queryResults = $db->selectTableWithColumn("Message", "Subject", $subject);
 		if($queryResults){
 			$this->fill($queryResults[0]);
 		} else {
 			return false;
 		}
 	}
+	
+	
 
 	// Sets all attributes using a QueryResult array
 	private function fill(DBQueryResult $result){
@@ -474,6 +476,22 @@ class Message{
 		return $messages;
 	}
 
+	public static function getMessagesByUserID($userID) {
+		$db = new DB();
+		$queryResults = $db->selectUserMessages($userID);
+		$messages = array();
+		foreach($queryResults as $qr){
+			$message = new Message();
+			$message->fill($qr);
+			$messages[] = $message;
+		}
+		return $messages;
+	}
+	public static function getMessagesByUserName($username) {
+		$user = User::withName($username);
+		return Message::getMessagesByUserID($user->getID());
+	}
+	
 	public function getID(){
 		return $this->_id;
 	}

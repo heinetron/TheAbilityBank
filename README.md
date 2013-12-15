@@ -1,1 +1,1 @@
-TheAbilityBank es un proycto que facilita el intercambio de habilidades
+TheAbilityBank es un proyecto que facilita el intercambio de habilidades

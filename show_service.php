@@ -19,107 +19,45 @@ include 'backend/config.php';
     <div id="cabecera" class="menu">
         <div id="menucabecera">
             <ul>
-                <li id="logo"> </li>
-                <li><a href="/perfil.php">Perfil</a>
-                    <!--ul class="dropdown">
-                        <li><a href="#">Correo interno</a></li>
-                        <li><a href="#">Editar perfil</a></li>
-                        <li><a href="#">Salir</a></li>
-                    </ul-->
-                </li>
-                <!--ul class="dropdown">
-                    <li><a href="#">Crear demanda</a></li>
-                    <li><a href="#">Crear oferta</a></li>
-                    <!--<li><h3><a href="javascript:void(0)" onclick = "document.getElementById('light').style.display='block';
-                           document.getElementById('fade').style.display='block'">Crear oferta</a></h3></li>
-                    <div id="light" class="white_content">
-
-                        <form action="crear_oferta.php" method="post">
-                            <div id="titformO">Título </div>
-
-                            <input id="tittxtformO" type=text name="tituloOferta"  width="...">
-                            <br>
-                            <br>
-                            <label id="catformO">Categoría</label>
-                            <select id="selformO" name="CategoriaOferta">
-                                <option value="Todo">Todo</option>
-                                <option value="Jardineria">Jardinería</option>
-                                <option value="Fontaneria">Fontanería</option>
-                                <option value="Electricidad">Electricidad</option>
-                                <option value="Cuidados de Personas">Cuidados de Personas</option>
-                                <option value="Idiomas">Idiomas</option>
-                                <option value="Musica">Música</option>
-                                <option value="Otros">Otros</option>
-                            </select>
-                            <br>
-                            <br>
-                            <label id="descformO" >Descripción</label>
-                            <textarea rows= "6" cols="40" id="desctxtformO" name="DescripcionOferta">
-                            </textarea>
-                            <br>
-                            <br>
-                            <a href="/index.php"><input type="submit" id="pubformO" name="Publicar" value="Publicar" onclick="irInicio()"/></a>
-                            <a href="/index.php"><input type="button" id="cancformO"name="Cancelar" value="Cancelar" /></a>
-                        </form>
-
-                        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';
-                        document.getElementById('fade').style.display='none'">Close</a>
-                    </div>
-                    <div id="fade" class="black_overlay"></div>
-                    <li><h3><a href="javascript:void(0)" onclick = "document.getElementById('light').style.display='block';
-                           document.getElementById('fade').style.display='block'">Crear demanda</a></h3></li>
-                    <div id="light" class="white_content">
-
-                        <form action="crear_demanda.php" method="post">
-                            <div id="titform">Título </div>
+                <li><a href="/index.php">Home</a></li>
+                <li id="logo"></li>
+                <?php
 
 
-                            <input id="tittxtform" type="text" name="tituloDemanda" style="width:320px">
-                            <br>
-                            <br>
-                            <label id="catform">Categoría</label>
-                            <select id="selform" name="CategoriaDemanda">
-                                <option value="todo">Todo</option>
-                                <option value="Jardineria">Jardinería</option>
-                                <option value="Fontaneria">Fontanería</option>
-                                <option value="Electricidad">Electricidad</option>
-                                <option value="Cuidados de Personas">Cuidados de Personas</option>
-                                <option value="Idiomas">Idiomas</option>
-                                <option value="Musica">Música</option>
-                                <option value="Otros">Otros</option>
-                            </select>
-                            <br>
-                            <br>
-                            <label id="descformD" >Descripción</label>
-                            <textarea rows= "6" cols="40" id="desctxtform" name="descripcionDemanda">
-                            </textarea>
-                            <br>
-                            <br>
-                            <a href="/index.php"><input type="submit" id="pubformD" name="Publicar" value="Publicar" onclick="irInicio()"/></a>
-                            <a href="/index.php"><input type="button" id="cancformd" name="Cancelar" value="Cancelar" /></a>
-                        </form>
 
-                        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';
-                        document.getElementById('fade').style.display='none'">Close</a>
-                    </div>
-                    <div id="fade" class="black_overlay"></div>
-                </ul -->
+                if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+
+                    echo '<li><a href="/perfil.php">'.ucfirst($_COOKIE['usuariotab']).'</a></li>';
+                } else {
+                    echo '<li><a href="/signup.php">Log in</a></li>';
+                } ?>
+
                 <li><a href="#">Noticias</a></li>
                 <li><a href="#">Contacto</a></li>
-                <li><a href="/index.php">Home</a></li>
-                <li><input id="buscar" type="text" placeholder="Buscar servicio" size="15"></li>
+
+                <li><form id="formBus" name="formBus" method="get" action="" >
+                        <input id="buscar" name="buscar" type="text" placeholder="BuscarServicio" size="15" >
+                        <input id="Bbuscar" type="submit" VALUE="Buscar" onclick=href="index.php?buscar="document.formBus['buscar'] >
+                    </form>
+                </li>
             </ul>
         </div>
         <div id="menusecundario">
             <ul>
-                <li><a href="#">Todo</a></li>
-                <li><a href="#">Jardinería</a></li>
-                <li><a href="#">Fontanería </a></li>
-                <li><a href="#">Electricidad</a></li>
-                <li><a href="#">Cuidado de Personas</a></li>
-                <li><a href="#">Música</a></li>
-                <li><a href="#">Idiomas</a></li>
-                <li><a href="#">Otros</a></li>
+                <?php
+                $id2 = $_GET['service'];
+                $stype2 = $_GET['servicetype'];
+                $service = Service::withID($id2,$stype2);
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Jardinería">Jardinería</a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Fontanería">Fontanería </a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Electricidad">Electricidad</a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Cuidado de Personas">Cuidado de Personas</a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Música">Música</a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Idiomas">Idiomas</a></li>';
+                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Otros">Otros</a></li>';
+
+                ?>
 
             </ul>
         </div>
@@ -129,6 +67,20 @@ include 'backend/config.php';
                     <td id="b_todo" onclick="Todo()">TODO</td>
                     <td id="b_ofer" onclick="Offer()">OFERTAS</td>
                     <td id="b_deman" onclick="Demand()">DEMANDAS</td>
+                    <?php
+                    if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+                        echo '<td id="b_todo" onclick=ToMyPosts()>MIS PUBLICACIONES</td>';
+                    }
+                    else{
+                        echo '<td id="b_todo" onclick=ToSignUp()>MIS PUBLICACIONES</td>';
+                    }
+                    if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+                        echo '<td id="b_todo" onclick=ToCreateService()>CREAR OFERTA/DEMANDA</td>';
+                    }
+                    else{
+                        echo '<td id="b_todo" onclick=ToSignUp()>CREAR OFERTA/DEMANDA</td>';
+                    }
+                    ?>
                 </tr>
             </table>
 
@@ -141,58 +93,69 @@ include 'backend/config.php';
             <?php
             $id = $_GET['service'];
             $stype = $_GET['servicetype'];
-            //echo $stype;
-            $service = Service::withID($id,$stype);
-            //echo $service;
-                $name = $service->getName();
-                $category = $service->getCategory()->getName();
-                $description = $service->getDescription();
-                $class = "ofertas";
-                if ($service->getServiceType() == Service::TYPE_OFFER){
-                    $class = "ofertas_demandas";
-                    $type = "Oferta";
-                } else {
-                    $class = "ofertas_demandas";
-                    $type = "Demanda";
-                }
-                echo '<div class="servicio2 '.$class.'"><h4>'."Descripción de la ".$type." " .$name.'</h4><h5>'.$category.'</h5><p>'.$description.'</p>
-                       </div>';
+            $user = $_GET['user'];
 
+            $service = Service::withID($id,$stype);
+            $name = $service->getName();
+            $category = $service->getCategory()->getName();
+            $description = $service->getDescription();
+            $class = "ofertas";
+            if ($service->getServiceType() == Service::TYPE_OFFER){
+                $class = "ofertas_demandas";
+                $type = "Oferta";
+            } else {
+                $class = "ofertas_demandas";
+                $type = "Demanda";
+            }
+            if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
+                echo '<div class="servicio2 '.$class.'"><h4>'."Descripción de la ".$type." " .$name.'</h4><h5>'.$category.'</h5><p>'.$description.'</p>
+                    <a href="/index.php"><input type="button" id="negotiation_button" name="negotiation_button" value="Pedir negociacion" /></a>
+                    <a href="/index.php"><input type="button" id="user_button" name="user_button" value="Ver perfil de '.$user.'" /></a>
+                    <h5>'.$type.' posteada por el usuario '.$user.'</h5></div>';
+            }
+            else{
+                echo '<div class="servicio2 '.$class.'"><h4>'."Descripción de la ".$type." " .$name.'</h4><h5>'.$category.'</h5><p>'.$description.'</p>
+                    <a href="/signup.php"><input type="button" id="negotiation_button" name="negotiation_button" value="Pedir negociacion" /></a>
+                    <a href="/signup.php"><input type="button" id="user_button" name="user_button" value="Ver perfil de '.$user.'" /></a>
+                    <h5>'.$type.' posteada por el usuario '.$user.'</h5></div>';
+            }
 
             ?>
         <hr>
         <div id="lista">
             <?php
-           /* echo $_GET['user'];
-            foreach(Service::getAllWithUser($_GET['user']) as $service){
-                $name = $service->getName();
-                $category = $service->getCategory()->getName();
-                $description = $service->getDescription();
-                $class = "ofertas";
-                if ($service->getServiceType() == Service::TYPE_OFFER){
-                    $class = "ofertas";
-                } else {
-                    $class = "demandas";
-                }
-                echo '<div class="servicio '.$class.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                            <a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'"><u>Ver</u></a></div>';
 
-            }
-           */
-            foreach(Service::getAll() as $service){
-                $name = $service->getName();
-                $category = $service->getCategory()->getName();
-                $description = $service->getDescription();
-                $class = "ofertas";
-                if ($service->getServiceType() == Service::TYPE_OFFER){
-                    $class = "ofertas";
-                } else {
-                    $class = "demandas";
-                }
-                echo '<div class="servicio '.$class.'"> <h4>'.$category.'</h4><p>'.$name.'</p>
-                            <a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'"><u>ver</u></a></div>';
+                if (isset($_GET['categoria'])){
 
-            }
+                    $categoriaServicio = $_GET['categoria'];
+                }
+			    else{
+                    $categoriaServicio = "vacio";
+                }
+
+
+                foreach(Service::getAll() as $service){
+                    $name = $service->getName();
+                    $category = $service->getCategory()->getName();
+                    $description = $service->getDescription();
+                    $class = "ofertas";
+                    if ($service->getServiceType() == Service::TYPE_OFFER){
+                        $class = "ofertas";
+                    } else {
+                        $class = "demandas";
+                    }
+
+                    if ($categoriaServicio != "vacio")  {
+                        if ($categoriaServicio == $category) {
+                            echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+                             		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$service= $categoriaServicio.'"><u>Ver</u></a></div>';
+                        }
+                    }
+                    else {
+                        echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
+                            		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$service= $categoriaServicio.'"><u>Ver</u></a></div>';
+                    }
+                }
             ?>
         </div>
     </div>
@@ -211,6 +174,15 @@ include 'backend/config.php';
             $(".ofertas").hide();
             $(".demandas").show();
         }
+
+        function ToSignUp(){
+            self.open("/signup.php", "_self");
+        }
+
+        function ToCreateService(){
+            self.open("/createservice.php", "_self")
+        }
+
     </script>
 
 
