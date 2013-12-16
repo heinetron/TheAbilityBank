@@ -1,7 +1,17 @@
 <?php
-require 'backend/config.php';
+	require 'backend/config.php';
 ?>
 <?php
+
+function printService($class, $service, $categoriaServicio){
+	$html = '<div class="servicio '.$class.'" data_category="'.$service->getCategory()->getName().'">
+             <a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$categoriaServicio.'">
+			 <h4>'.$service->getCategory()->getName().'</h4>
+			 <p>'.substr($service->getName(),0,20).'</p>
+			 <u>Ver</u>
+			</a></div>';
+	return $html;
+}
 
 if(isset($_GET['logout'])) {
 	setcookie("usuariotab","",time()-3600);
@@ -29,11 +39,20 @@ if(isset($_GET['logout'])) {
 						<li id="logo"></li>
                         <li><a href="/index.php">Home</a></li>
                         <?php
-
-
-
                         if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
-                            echo '<li><a href="/perfil.php">'.ucfirst($_COOKIE['usuariotab']).'</a></li>';
+                            $user=User::withName($_COOKIE['usuariotab']);
+                            $i = 0;
+                            foreach(Message::getMessagesByUserName($user->getName()) as $message){
+                                $receiverID = $message->getReceiver();
+                                $receiver = User::withID($receiverID);
+                                $read = $message->getRead();
+                                if($receiver == $user)
+                                    if($read==0)
+                                        $i++;
+                            }
+
+                            echo '<li><a href="/perfil_mensajes.php">'.ucfirst($_COOKIE['usuariotab']).' '."<u>$i</u>".'</a></li>';
+
                         } else {
                             echo '<li><a href="/signup.php">Log in</a></li>';
                         } ?>
@@ -42,11 +61,13 @@ if(isset($_GET['logout'])) {
 						<li><a href="#">Contacto</a></li>
 						<li><form id="formBus" name="formBus" method="get" action="" >
                                 <input id="buscar" name="buscar" type="text" placeholder="BuscarServicio" size="15" >
-                                <input id="Bbuscar" type="submit" VALUE="Buscar" onclick="Buscar()" >
+
                             </form></li>
 					</ul>
                     <script>
+                        document.formBus.submit();
                         function Buscar(){
+                            self.open("/index.php","_self");
                             window.location= "?buscar="document.formBus['buscar'];
 
                         }
@@ -113,36 +134,29 @@ if(isset($_GET['logout'])) {
                     }
 
 					
-						foreach(Service::getAll() as $service){
-							$name = $service->getName();
-                            $category = $service->getCategory()->getName();
+					foreach(Service::getAll() as $service){
 
-                            $description = $service->getDescription();
+						if ($service->getServiceType() == Service::TYPE_OFFER){
 							$class = "ofertas";
-							if ($service->getServiceType() == Service::TYPE_OFFER){
-								$class = "ofertas";
-							} else {
-								$class = "demandas";
-							}
-
-
-                            if ($categoriaServicio != "vacio") {
-                                if ($categoriaServicio == $category) {
-                                    echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                             		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria= '.$categoriaServicio.'"><u>Ver</u></a></div>';
-                                }
-                            }
-                            else if ($buscarServicio != "vacio" && $buscarServicio != null) {
-                                if (strstr($description, $buscarServicio)) {
-                                    echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                            		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$categoriaServicio.'"><u>Ver</u></a></div>';
-                                }
-                            }
-                            else {
-                                echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                            	<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$categoriaServicio.'"><u>Ver</u></a></div>';
-                            }
+						} else {
+							$class = "demandas";
 						}
+
+
+						if ($categoriaServicio != "vacio") {
+							if ($categoriaServicio == $service->getCategory()->getName()) {
+								echo printService($class, $service, $categoriaServicio);
+							}
+						}
+						else if ($buscarServicio != "vacio" && $buscarServicio != null) {
+							if (strstr($description, $buscarServicio)) {
+								echo printService($class, $service, $categoriaServicio);
+							}
+						}
+						else {
+								echo printService($class, $service, $categoriaServicio);
+						}
+					}
                     ?>
                 </div>
 			</div>
