@@ -10,4 +10,6 @@ define ( 'DB_USER', 'tab2' );
 define ( 'DB_PASSWORD', 'tab2013' );  
 define ( 'DB_NAME', 'tab2' ); 
 define ( 'HASH_ALGO', 'ripemd320');
+
+date_default_timezone_set('Europe/Madrid');
 ?>
