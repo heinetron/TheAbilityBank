@@ -1,5 +1,18 @@
 <?php
 include 'backend/config.php';
+
+function printService($class, $service, $categoriaServicio){
+	$html = '<div class="servicio '.$class.'" data_category="'.$service->getCategory()->getName().'">
+             <a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$categoriaServicio.'">
+			 <h4>'.$service->getCategory()->getName().'</h4>
+			 <p>'.substr($service->getName(),0,20).'</p>
+			 <u>Ver</u>
+			</a></div>';
+	return $html;
+}
+
+session_start();
+
 ?>
 
 <html>
@@ -45,18 +58,34 @@ include 'backend/config.php';
         <div id="menusecundario">
             <ul>
                 <?php
-                $id2 = $_GET['service'];
-                $stype2 = $_GET['servicetype'];
-                $service = Service::withID($id2,$stype2);
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Jardinería">Jardinería</a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Fontanería">Fontanería </a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Electricidad">Electricidad</a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Cuidado de Personas">Cuidado de Personas</a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Música">Música</a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Idiomas">Idiomas</a></li>';
-                echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Otros">Otros</a></li>';
-
+				if(isset($_GET['service'])){
+					$id2 = $_GET['service'];
+					$_SESSION['service'] = $id2;
+					$stype2 = $_GET['servicetype'];
+					$_SESSION['servicetype'] = $stype2;
+					$service = Service::withID($id2,$stype2);
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Jardinería">Jardinería</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Fontanería">Fontanería </a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Electricidad">Electricidad</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Cuidado de Personas">Cuidado de Personas</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Música">Música</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Idiomas">Idiomas</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Otros">Otros</a></li>';
+				}
+				else if (isset($_SESSION['service'])){
+					$id2 = $_SESSION['service'];
+					$stype2 = $_SESSION['servicetype'];
+					$service = Service::withID($id2,$stype2);
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Jardinería">Jardinería</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Fontanería">Fontanería </a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Electricidad">Electricidad</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Cuidado de Personas">Cuidado de Personas</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Música">Música</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Idiomas">Idiomas</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Otros">Otros</a></li>';
+				}
                 ?>
 
             </ul>
@@ -91,35 +120,53 @@ include 'backend/config.php';
 
     <div id="principal">
             <?php
-            $id = $_GET['service'];
-            $stype = $_GET['servicetype'];
-            $user = $_GET['user'];
+			if(isset($_GET['service'])){
+				$id = $_GET['service'];
+				$stype = $_GET['servicetype'];
+				$serviceAuthor = $_GET['user'];
 
-            $service = Service::withID($id,$stype);
-            $name = $service->getName();
-            $category = $service->getCategory()->getName();
-            $description = $service->getDescription();
-            $class = "ofertas";
-            if ($service->getServiceType() == Service::TYPE_OFFER){
-                $class = "ofertas_demandas";
-                $type = "Oferta";
-            } else {
-                $class = "ofertas_demandas";
-                $type = "Demanda";
-            }
-            if(isset($_COOKIE['usuariotab']) && $_COOKIE['usuariotab'] != ""){
-                echo '<div class="servicio2 '.$class.'"><h4>'."Descripción de la ".$type." " .$name.'</h4><h5>'.$category.'</h5><p>'.$description.'</p>
-                    <a href="/index.php"><input type="button" id="negotiation_button" name="negotiation_button" value="Pedir negociacion" /></a>
-                    <a href="/index.php"><input type="button" id="user_button" name="user_button" value="Ver perfil de '.$user.'" /></a>
-                    <h5>'.$type.' posteada por el usuario '.$user.'</h5></div>';
-            }
-            else{
-                echo '<div class="servicio2 '.$class.'"><h4>'."Descripción de la ".$type." " .$name.'</h4><h5>'.$category.'</h5><p>'.$description.'</p>
-                    <a href="/signup.php"><input type="button" id="negotiation_button" name="negotiation_button" value="Pedir negociacion" /></a>
-                    <a href="/signup.php"><input type="button" id="user_button" name="user_button" value="Ver perfil de '.$user.'" /></a>
-                    <h5>'.$type.' posteada por el usuario '.$user.'</h5></div>';
-            }
-
+				$service = Service::withID($id,$stype);
+				$name = $service->getName();
+				$category = $service->getCategory()->getName();
+				$description = $service->getDescription();
+				$class = "ofertas";
+				if ($service->getServiceType() == Service::TYPE_OFFER){
+					$class = "ofertas_demandas";
+					$type = "Oferta";
+				} else {
+					$class = "ofertas_demandas";
+					$type = "Demanda";
+				}
+				//TODO link perfil publico  <input type="Submit" Name="ver_perfil" Value="Ver perfil de " $serviceAuthor>
+				echo '<div class="servicio2 '.$class.'"><h4>'."Descripción de la ".$type." " .$name.'</h4><h5>'.$category.'</h5><p>'.$description.'</p>';
+				echo '<form id="twoButtons" name="twoButtons" method="post" action="show_service.php" >
+						<input type="Submit" Name="pedir_neg" Value="Solicitar negociación">
+							  
+							  </form>';
+				echo '<h5>'.$type.' publicada por el usuario '.$serviceAuthor.'</h5></div>';
+				$_SESSION['serviceAuthor'] = $serviceAuthor;
+			}	
+			
+			if(isset($_POST['pedir_neg'])) {	
+				if($_POST['pedir_neg'] == 'Solicitar negociación') {
+					$serviceAuthor = User::withName($_SESSION['serviceAuthor']);
+					$loggedUser = User::withName($_COOKIE['usuariotab']);
+					if($loggedUser->getID() != $serviceAuthor->getID()){
+						$message = new Message();
+						$message->setSubject('Usuario interesado');
+						$message->setBody('A un usuario le interesa tu oferta');
+						$message->setRead(0);
+						$message->setDate(time());
+						$message->setSender($loggedUser->getID());
+						$message->setReceiver($serviceAuthor->getID());
+						$message->save();
+						echo "Se le ha enviado un mensaje a " . $serviceAuthor->getName();
+					} else {
+						echo "¡No puedes negociar contigo mismo!";
+					}
+				}
+			}
+			
             ?>
         <hr>
         <div id="lista">
@@ -147,13 +194,11 @@ include 'backend/config.php';
 
                     if ($categoriaServicio != "vacio")  {
                         if ($categoriaServicio == $category) {
-                            echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                             		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$service= $categoriaServicio.'"><u>Ver</u></a></div>';
+							echo printService($class, $service, $categoriaServicio);
                         }
                     }
                     else {
-                        echo '<div class="servicio '.$class.'" data_category="'.$category.'"><h4>'.$category.'</h4><p>'.$name.'</p>
-                            		<a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$service= $categoriaServicio.'"><u>Ver</u></a></div>';
+                        echo printService($class, $service, $categoriaServicio);
                     }
                 }
             ?>
