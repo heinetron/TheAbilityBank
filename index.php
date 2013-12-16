@@ -22,7 +22,7 @@ if(isset($_GET['logout'])) {
 
 <html>
 	<head>
-        <meta charset="utf-8" />
+        
 		<title>The Ability Bank</title>
         <link rel="shortcut icon" href="/icon.png">
 		<link rel="stylesheet" href="estilos_heine.css" type="text/css">
@@ -76,13 +76,12 @@ if(isset($_GET['logout'])) {
 				<div id="menusecundario">
 					<ul>
 						<li><a href="index.php">Todo</a></li>
-						<li><a href="index.php?categoria=Jardinería">Jardinería</a></li>
-						<li><a href="index.php?categoria=Fontanería">Fontanería </a></li>
-						<li><a href="index.php?categoria=Electricidad">Electricidad</a></li>
-						<li><a href="index.php?categoria=Cuidado de Personas">Cuidado de Personas</a></li>
-						<li><a href="index.php?categoria=Música">Música</a></li>
-						<li><a href="index.php?categoria=Idiomas">Idiomas</a></li>
-						<li><a href="index.php?categoria=Otros">Otros</a></li>
+					<?php	
+						foreach(Category::getAll() as $category) {
+							
+							echo '<li><a href="index.php?categoria='.$category->getName().'">'.$category->getName().'</a></li>';
+						}
+					?>
 						
 					</ul>
 				</div>
@@ -149,7 +148,7 @@ if(isset($_GET['logout'])) {
 							}
 						}
 						else if ($buscarServicio != "vacio" && $buscarServicio != null) {
-							if (strstr($description, $buscarServicio)) {
+							if (strstr($service->getDescription(), $buscarServicio)) {
 								echo printService($class, $service, $categoriaServicio);
 							}
 						}
