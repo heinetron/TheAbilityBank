@@ -17,7 +17,7 @@ session_start();
 
 <html>
 <head>
-    <meta charset="utf-8" />
+    
     <title>The Ability Bank</title>
     <link rel="shortcut icon" href="/icon.png">
     <link rel="stylesheet" href="estilos_heine.css" type="text/css">
@@ -65,26 +65,21 @@ session_start();
 					$_SESSION['servicetype'] = $stype2;
 					$service = Service::withID($id2,$stype2);
 					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Jardinería">Jardinería</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Fontanería">Fontanería </a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Electricidad">Electricidad</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Cuidado de Personas">Cuidado de Personas</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Música">Música</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Idiomas">Idiomas</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Otros">Otros</a></li>';
+					
+					foreach(Category::getAll() as $category) {	
+						echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$category->getName().'">'.$category->getName().'</a></li>';
+					}
 				}
 				else if (isset($_SESSION['service'])){
 					$id2 = $_SESSION['service'];
 					$stype2 = $_SESSION['servicetype'];
 					$service = Service::withID($id2,$stype2);
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Jardinería">Jardinería</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Fontanería">Fontanería </a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Electricidad">Electricidad</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Cuidado de Personas">Cuidado de Personas</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Música">Música</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Idiomas">Idiomas</a></li>';
-					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria=Otros">Otros</a></li>';
+					echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'">Todo</a></li>';					
+					
+					foreach(Category::getAll() as $category) {	
+						echo '<li><a href="show_service.php?service='.$service->getID().'&servicetype='.$service->getServiceType().'&user='.$service->getUser()->getName().'&categoria='.$category->getName().'">'.$category->getName().'</a></li>';
+					}
+
 				}
                 ?>
 
