@@ -112,7 +112,7 @@ class DB {
 	public function insertUser($name, $email, $password, $salt, $premium, $isAdmin, $valoraciones, $banDate)
 	{
 		// Insert data		
-		$sql = "INSERT INTO `User`(`Name`, `Email`, `Password`, `Salt`, `Premium`) VALUES ('$name', '$email', '$password','$salt','$premium', '$isAdmin', '$valoraciones', '$banDate')";
+		$sql = "INSERT INTO `User`(`Name`, `Email`, `Password`, `Salt`, `Premium`, `IsAdmin`, `Valoraciones`, `BanDate`) VALUES ('$name', '$email', '$password','$salt','$premium', '$isAdmin', '$valoraciones', '$banDate')";
 		
 		if(!$this->query($sql)){
 			//echo "Error inserting user: " . mysql_error();
