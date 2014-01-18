@@ -6,6 +6,9 @@ class User{
 	private $_email;
 	private $_password;
 	private $_salt;
+	private $_isAdmin;
+	private $_valoraciones;
+	private $_banDate;
 	
 	// Loads a user using the ID
 	// $user = User::withID(1)
@@ -51,17 +54,20 @@ class User{
 		$this->_password = $result->Password;
 		$this->_salt = $result->Salt;
 		$this->_premium = $result->Premium;
+		$this->_isAdmin = $result->IsAdmin;
+		$this->_valoraciones = $result->Valoraciones;
+		$this->_banDate = $result->BanDate;
 	}
 	
 	public function save(){
 		$db = new DB();
-		$queryResults = $db->insertUser($this->_name, $this->_email, $this->_password, $this->_salt, $this->_premium);
+		$queryResults = $db->insertUser($this->_name, $this->_email, $this->_password, $this->_salt, $this->_premium, $this->_isAdmin, $this->_valoraciones, $this->_banDate);
 		return $queryResults;
 	}
 	
 	public function update(){
 		$db = new DB();
-		$queryResults = $db->updateUser($this->_name, $this->_email, $this->_password, $this->_salt, $this->_premium);
+		$queryResults = $db->updateUser($this->_name, $this->_email, $this->_password, $this->_salt, $this->_premium, $this->_isAdmin, $this->_valoraciones, $this->_banDate);
 		return $queryResults;
 	}
 	
@@ -110,6 +116,16 @@ class User{
 	public function getPremium(){
 		return $this->_premium;
 	}
+	public function getIsAdmin() {
+		return $this->_isAdmin;
+	}
+	public function getValoraciones() {
+		return $this->_valoraciones;
+	}
+	public function getBanDate() {
+		return $this->_banDate;
+	}
+	
 	public function setName($name){
 		$this->_name = $name;
 	}
@@ -124,6 +140,15 @@ class User{
 	}	
 	public function setPremium($premium){
 		$this->_premium = $premium;
+	}
+	public function setIsAdmin($isAdmin){
+		$this->_isAdmin = $isAdmin;
+	}
+	public function setValoraciones($valoraciones){
+		$this->_valoraciones = $valoraciones;
+	}
+	public function setBanDate($banDate){
+		$this->_banDate = $banDate;
 	}
 
 
@@ -167,6 +192,7 @@ class Service{
 		$queryResults = $db->selectTableWithColumn("Service", "id", $id);
 		if($queryResults){
 			$this->fill($queryResults[0]);
+			return true;
 		} else {
 			return false;
 		}
@@ -185,6 +211,7 @@ class Service{
 		$queryResults = $db->selectTableWithColumn("Service", "Name", $name);
 		if($queryResults){
 			$this->fill($queryResults[0]);
+			return true;
 		} else {
 			return false;
 		}
@@ -369,11 +396,11 @@ class Category{
 		$queryResults = $db->selectAll("Category");
 		$categories = array();
 		foreach($queryResults as $qr){
-			$category = new Dategory();
+			$category = new Category();
 			$category->fill($qr);
 			$categories[] = $category;
 		}
-		return $demands;
+		return $categories;
 	}	
 	public function getID(){
 		return $this->_id;
@@ -397,6 +424,7 @@ class Message{
 	private $_date;
 	private $_sender;
 	private $_receiver;
+    private $_notification;
 	
 	// Carga un mensaje usando su id
 	// $message = Message::withID(1)
@@ -445,17 +473,18 @@ class Message{
 		$this->_date = $result->Date;
 		$this->_sender = $result->Sender;
 		$this->_receiver = $result->Receiver;
+        $this->_notification = $result->Notification;
 	}
 	
 	public function save(){
 		$db = new DB();
-		$queryResults = $db->insertMessage($this->_subject, $this->_body, $this->_read, $this->_date, $this->_sender, $this->_receiver);
+		$queryResults = $db->insertMessage($this->_subject, $this->_body, $this->_read, $this->_date, $this->_sender, $this->_receiver, $this->_notification);
 		return $queryResults;
 	}
 	
 	public function update(){
 		$db = new DB();
-		$queryResults = $db->updateMessage($this->_subject, $this->_body, $this->_read, $this->_date, $this->_sender, $this->_receiver);
+		$queryResults = $db->updateMessage($this->_id, $this->_subject, $this->_body, $this->_read, $this->_date, $this->_sender, $this->_receiver, $this->_notification);
 		return $queryResults;
 	}
 	
@@ -480,12 +509,15 @@ class Message{
 
 	public static function getMessagesByUserID($userID) {
 		$db = new DB();
+		
 		$queryResults = $db->selectUserMessages($userID);
 		$messages = array();
-		foreach($queryResults as $qr){
-			$message = new Message();
-			$message->fill($qr);
-			$messages[] = $message;
+		if($queryResults != null){
+			foreach($queryResults as $qr){
+				$message = new Message();
+				$message->fill($qr);
+				$messages[] = $message;
+			}
 		}
 		return $messages;
 	}
@@ -507,7 +539,7 @@ class Message{
 		return $this->_read;
 	}
 	public function getDate(){
-		return $this->_date;
+		return date('d/m/y G:i', $this->_date);
 	}
 	public function getSender(){
 		return $this->_sender;
@@ -515,6 +547,9 @@ class Message{
 	public function getReceiver(){
 		return $this->_receiver;
 	}
+    public function getNotification(){
+        return $this->_notification;
+    }
 	
 	public function setSubject($subject){
 		$this->_subject = $subject;
@@ -534,6 +569,9 @@ class Message{
 	public function setReceiver($receiver){
 		$this->_receiver = $receiver;
 	}
+    public function setNotification($notification){
+        $this->_notification = $notification;
+    }
 
 	public function __toString(){
 		return "ID: " . $this->_id . 
@@ -543,6 +581,7 @@ class Message{
 		" / Fecha envio: " . $this->_date .
 		" / sender: " . $this->_sender . 
 		" / receiver: " . $this->_receiver;
+        " / notification: " . $this->_notification;
 		
 	}
 		
