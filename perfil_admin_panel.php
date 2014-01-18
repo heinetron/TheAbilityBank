@@ -75,13 +75,18 @@ include 'backend/config.php';
             </div>
             <div id="panel_administrador">
                <h1>Bloquear usuarios<h1>
-			   
 			   <form name="blockUserForm" method="POST" action="perfil_admin_panel.php">
 					<p> <input type="text" name="UserToBlock" placeholder="Usuario a bloquear"> </p>
 					<p> <input type="text" name="BlockDuration" placeholder="Dias de bloqueo"> </p>
 					<p> <input type="text" name="Reason" placeholder="Motivo del bloqueo"> </p>
 					<p> <input type="text" name="Details" placeholder="Detalles"> </p>
 					<input type="Submit" name="BlockUserButton" value="Bloquear usuario">
+				</form>
+				
+				<h1>Desbloquear usuarios<h1>
+			   <form name="blockUserForm" method="POST" action="perfil_admin_panel.php">
+					<p> <input type="text" name="UserToUnblock" placeholder="Usuario a desbloquear"> </p>
+					<input type="Submit" name="UnblockUserButton" value="Desbloquear usuario">
 				</form>
             </div>
 
@@ -106,11 +111,32 @@ include 'backend/config.php';
 				$message->setSubject("Tu cuenta ha sido bloqueada");
 				$message->setBody("Nos hemos visto obligados a bloquear tu cuenta temporalmente. Motivo del bloqueo: " . $reason .
 							"\nDurante los pr&oacute;ximos " . $blockDuration . " d&iacute;as, no podr&aacute;s efectuar la mayor&iacute;a de las operaciones propias de usuarios registrados.\n" . 
-							"Detalles del bloqueo: " . $details . "\nEl bloqueo expira: " . date('d-m-Y H:i:s', $banDate));
+							"Detalles del bloqueo: " . $details . ".El bloqueo expira: " . date('d-m-Y H:i:s', $banDate));
 				$message->setRead(0);
 				$message->setDate(time());
 				$message->setSender($user->getID());
 				$message->setReceiver($userToBlock->getID());
+				$message->setNotification(1);
+				$message->save();
+			}
+		}
+		
+		if(isset($_POST["UnblockUserButton"])) {
+			if($_POST["UnblockUserButton"] == "Desbloquear usuario") {
+				$userToUnblock = User::withName($_POST["UserToUnblock"]);
+				
+				// Sets the date when the block expires to 0 (unblocked)
+				$userToUnblock->setBanDate(0);
+				$userToUnblock->update();
+				
+				//Sends a message to the user
+				$message = new Message();
+				$message->setSubject("Cuenta desbloqueada");
+				$message->setBody("Tu cuenta ha sido desbloqueada. Vuelves a tener acceso completo a TheAbilityBank.");
+				$message->setRead(0);
+				$message->setDate(time());
+				$message->setSender($user->getID());
+				$message->setReceiver($userToUnblock->getID());
 				$message->setNotification(1);
 				$message->save();
 			}
