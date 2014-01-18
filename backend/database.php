@@ -70,6 +70,19 @@ class DB {
 			//echo "Could not delete records from $tableName";
 		}
 	}
+
+//    public function deleteTable($tableName){
+//        $sql="DROP TABLE $tableName";
+//
+//        // Execute query
+//        $result = $this->query($sql);
+//        if($result){
+//            //echo "Drop $tableName";
+//        }
+//        else{
+//            //echo "Could not drop $tableName";
+//        }
+//    }
 	
 	public function printTable($tableName){
 		$results = $this->query("SELECT * FROM $tableName");
@@ -85,7 +98,7 @@ class DB {
 	public function createUserTable()
 	{
 		// Create table
-		$sql="CREATE TABLE IF NOT EXISTS User(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40) NOT NULL, UNIQUE(Name), Email VARCHAR(40) NOT NULL, Password VARCHAR(120) NOT NULL, Salt VARCHAR(120) NOT NULL, Premium BOOL NOT NULL);";
+		$sql="CREATE TABLE IF NOT EXISTS User(id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), Name VARCHAR(40) NOT NULL, UNIQUE(Name), Email VARCHAR(40) NOT NULL, Password VARCHAR(120) NOT NULL, Salt VARCHAR(120) NOT NULL, Premium BOOL NOT NULL, IsAdmin BOOL NOT NULL, Valoraciones INT NOT NULL, BanDate INT NOT NULL);";
 
 		// Execute query
 		if($this->query($sql)){
@@ -96,10 +109,10 @@ class DB {
 		}
 	}
 	
-	public function insertUser($name, $email, $password, $salt, $premium)
+	public function insertUser($name, $email, $password, $salt, $premium, $isAdmin, $valoraciones, $banDate)
 	{
 		// Insert data		
-		$sql = "INSERT INTO `User`(`Name`, `Email`, `Password`, `Salt`, `Premium`) VALUES ('$name', '$email', '$password','$salt','$premium')";
+		$sql = "INSERT INTO `User`(`Name`, `Email`, `Password`, `Salt`, `Premium`) VALUES ('$name', '$email', '$password','$salt','$premium', '$isAdmin', '$valoraciones', '$banDate')";
 		
 		if(!$this->query($sql)){
 			//echo "Error inserting user: " . mysql_error();
@@ -107,9 +120,9 @@ class DB {
 		}
 		return true;
 	}
-	public function updateUser($name, $email, $password, $salt, $premium)
+	public function updateUser($name, $email, $password, $salt, $premium, $isAdmin, $valoraciones, $banDate)
 	{
-		$sql = "UPDATE `User` SET `Email`=\"$email\",`Password`=\"$password\",`Salt`=\"$salt\",`Premium`=\"$premium\" WHERE Name=\"$name\"";
+		$sql = "UPDATE `User` SET `Email`=\"$email\",`Password`=\"$password\",`Salt`=\"$salt\",`Premium`=\"$premium\",`IsAdmin`=\"$isAdmin\",`Valoraciones`=\"$valoraciones\",`BanDate`=\"$banDate\" WHERE Name=\"$name\"";
 		if(!$this->query($sql)){
 			//echo "Error updating user: " . mysql_error();
 			return false;
@@ -197,37 +210,38 @@ class DB {
 			 `Date` int(11) NOT NULL,
 			 `Sender` int(11) NOT NULL,
 			 `Receiver` int(11) NOT NULL,
+			 `Notification`  int(11) NOT NULL,
 			 PRIMARY KEY (`id`)
 			) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8";
 		// Execute query
 		if($this->query($sql)){
-			//echo "Table created successfully";
+//			echo "Table created successfully";
 		}
 		else{
-			//echo "Error creating Message table: " . mysql_error();
+//			echo "Error creating Message table: " . mysql_error();
 		}
 	}
 	
-	public function insertMessage($subject, $body, $read, $date, $sender, $receiver)
+	public function insertMessage($subject, $body, $read, $date, $sender, $receiver, $notification)
 	{
 		// Insert data		
-		$sql = "INSERT INTO `Message`(`subject`, `body`, `read`, `date`, `sender`, `receiver`) VALUES ('$subject', '$body', '$read', '$date', '$sender', '$receiver')";
+		$sql = "INSERT INTO `Message`(`subject`, `body`, `read`, `date`, `sender`, `receiver`, `notification` ) VALUES ('$subject', '$body', '$read', '$date', '$sender', '$receiver', '$notification')";
 		
 		if(!$this->query($sql)){
 			echo "Error inserting message: " . mysql_error();
 			return false;
 		}
-		echo "Row inserted";
+		// echo "Row inserted";
 		return true;
 	}
-	public function updateMessage($id, $subject, $body, $read, $date, $sender, $receiver)
+	public function updateMessage($id, $subject, $body, $read, $date, $sender, $receiver, $notification)
 	{
-		$sql = "UPDATE `Message` SET `id`='$id', `subject`='$subject',`body`='$body',`read`='$read',`date`='$date',`sender`='$sender',`receiver`='$receiver' WHERE `id`='$id'";
+		$sql = "UPDATE `Message` SET `subject`='$subject',`body`='$body',`read`='$read',`date`='$date',`sender`='$sender',`receiver`='$receiver', `notification`='$notification' WHERE `id`='$id'";
 		if(!$this->query($sql)){
 			echo "Error updating message: " . mysql_error();
 			return false;
 		}
-		echo "Row updated";		
+		// echo "Row updated";		
 		return true;
 	}
 	
@@ -237,7 +251,7 @@ class DB {
 			echo "Error deleting message: " . mysql_error();
 			return false;
 		}
-		echo "Row deleted";
+		// echo "Row deleted";
 		return true;		
 	}
 	
